@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_description">Trwające zajęcia z odliczaniem do ich końca albo najbliższe zajęcia.</string>
+
+    <!-- Tabs -->
+    <string name="tab_upcoming">Najbliższe</string>
+    <string name="tab_week">Tydzień</string>
+    <string name="tab_settings">Ustawienia</string>
+
+    <!-- Common -->
+    <string name="back">Wstecz</string>
+    <string name="cancel">Anuluj</string>
+    <string name="try_again">Spróbuj ponownie</string>
+    <string name="downloading_plan">Pobieranie planu…</string>
+    <string name="now">Teraz</string>
+    <string name="today_day">Dziś · %1$s</string>
+    <string name="tomorrow_day">Jutro · %1$s</string>
+    <string name="time_range">%1$s – %2$s</string>
+
+    <!-- Upcoming -->
+    <string name="next_class">Następne: %1$s</string>
+    <string name="no_upcoming_title">Brak nadchodzących zajęć</string>
+    <string name="no_upcoming_message">W tym planie nie ma już więcej zajęć.</string>
+    <string name="no_schedule_title">Brak planu</string>
+    <string name="no_schedule_message">Przeciągnij w dół, aby odświeżyć.</string>
+
+    <!-- Class rows and details -->
+    <string name="ends_in">Koniec za %1$s</string>
+    <string name="until_time">do %1$s</string>
+    <string name="detail_when">Kiedy</string>
+    <string name="detail_date">Data</string>
+    <string name="detail_time">Godzina</string>
+    <string name="detail_duration">Czas trwania</string>
+    <string name="detail_room">Sala</string>
+    <string name="detail_rooms">Sale</string>
+    <string name="detail_teacher">Prowadzący</string>
+    <string name="detail_teachers">Prowadzący</string>
+
+    <!-- Durations -->
+    <string name="duration_hours">%1$d godz.</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d godz. %2$d min</string>
+    <string name="in_hours">za %1$d godz.</string>
+    <string name="in_minutes">za %1$d min</string>
+    <string name="in_hours_minutes">za %1$d godz. %2$d min</string>
+    <plurals name="in_days">
+        <item quantity="one">za %1$d dzień</item>
+        <item quantity="few">za %1$d dni</item>
+        <item quantity="many">za %1$d dni</item>
+        <item quantity="other">za %1$d dnia</item>
+    </plurals>
+
+    <!-- Week -->
+    <string name="today">Dziś</string>
+    <string name="weeks">Tygodnie</string>
+    <string name="previous_week">Poprzedni tydzień</string>
+    <string name="next_week">Następny tydzień</string>
+    <string name="no_classes">Brak zajęć</string>
+    <string name="no_classes_this_week">Brak zajęć w tym tygodniu</string>
+    <string name="go_to_next_week_with_classes">Przejdź do najbliższego tygodnia z zajęciami</string>
+    <plurals name="class_count">
+        <item quantity="one">%1$d zajęcia</item>
+        <item quantity="few">%1$d zajęcia</item>
+        <item quantity="many">%1$d zajęć</item>
+        <item quantity="other">%1$d zajęcia</item>
+    </plurals>
+    <string name="week_summary">%1$s · %2$s godz.</string>
+
+    <!-- Settings -->
+    <string name="settings_plan">Plan</string>
+    <string name="settings_classes">Zajęcia</string>
+    <string name="settings_updated">Zaktualizowano</string>
+    <string name="just_now">Przed chwilą</string>
+    <string name="never">Nigdy</string>
+    <string name="change_group">Zmień grupę…</string>
+    <string name="refresh_now">Odśwież teraz</string>
+    <string name="live_notification">Powiadomienie na żywo</string>
+    <string name="show_during_classes">Pokazuj w trakcie zajęć</string>
+    <string name="live_notification_description">Pokazuje dzisiejsze zajęcia na ekranie blokady i na pasku stanu: odliczanie, salę i oś czasu dnia. Pojawia się godzinę przed pierwszymi zajęciami i znika po ostatnich.</string>
+    <string name="notifications_off">Powiadomienia dla Plan UBB są wyłączone.</string>
+    <string name="open_settings">Otwórz ustawienia</string>
+    <string name="live_updates_off">Aktualizacje na żywo dla Plan UBB są wyłączone, więc powiadomienie nie będzie przypięte na górze ekranu blokady.</string>
+    <string name="turn_on">Włącz</string>
+    <string name="plan_address">Adres planu</string>
+    <string name="plan_url_or_id">Adres URL lub ID planu</string>
+    <string name="invalid_plan">To nie wygląda na adres URL ani na numeryczne ID planu.</string>
+    <string name="use_this_plan">Użyj tego planu</string>
+    <string name="open_on_site">Otwórz na plany.ubb.edu.pl</string>
+    <string name="plan_address_footer">Możesz też wkleić adres dowolnego planu z plany.ubb.edu.pl (grupy, prowadzącego lub sali). Obecny: typ %1$d, id %2$d.</string>
+
+    <!-- Group picker -->
+    <string name="choose_group">Wybierz grupę</string>
+    <string name="choose_your_group">Wybierz swoją grupę</string>
+    <string name="picker_intro">Wybierz wydział, tryb studiów, kierunek i semestr, aż dojdziesz do swojej grupy i podgrupy laboratoryjnej. Możesz to później zmienić w Ustawieniach.</string>
+    <string name="search">Szukaj</string>
+    <string name="nothing_here">Nic tu nie ma.</string>
+    <string name="use_whole_plan">Użyj całego planu %1$s</string>
+    <string name="use_whole_plan_footer">Pokazuje zajęcia wszystkich grup poniżej.</string>
+    <string name="current">Obecny</string>
+    <string name="tree_semester">Semestr %1$s</string>
+    <string name="tree_group">Grupa %1$s</string>
+    <string name="tree_subgroup">Podgrupa %1$s</string>
+
+    <!-- Class kinds -->
+    <string name="kind_lecture">Wykład</string>
+    <string name="kind_laboratory">Laboratorium</string>
+    <string name="kind_exercises">Ćwiczenia</string>
+    <string name="kind_language">Lektorat</string>
+    <string name="kind_project">Projekt</string>
+    <string name="kind_seminar">Seminarium</string>
+    <string name="kind_pe">Wychowanie fizyczne</string>
+    <string name="kind_class">Zajęcia</string>
+
+    <!-- Errors -->
+    <string name="error_http">Serwer planu odpowiedział kodem HTTP %1$d.</string>
+    <string name="error_not_calendar">Serwer planu nie zwrócił kalendarza. Sprawdź plan w Ustawieniach.</string>
+    <string name="error_offline">Nie można połączyć się z plany.ubb.edu.pl. Sprawdź połączenie z internetem.</string>
+    <string name="error_timeout">Serwer planu nie odpowiada. Spróbuj ponownie później.</string>
+    <string name="error_download">Nie udało się pobrać planu.</string>
+    <string name="error_load_list">Nie udało się wczytać listy.</string>
+
+    <!-- Live notification -->
+    <string name="channel_name">Dzisiejsze zajęcia</string>
+    <string name="channel_description">Odliczanie na żywo, sala i oś czasu dzisiejszych zajęć.</string>
+    <string name="notif_title">%1$s · %2$s</string>
+    <string name="notif_next_title">Następne: %1$s · %2$s</string>
+    <string name="notif_in_class">%1$s do %2$s · %3$s</string>
+    <string name="notif_waiting">%1$s o %2$s · %3$s</string>
+    <string name="notif_next_line">Następne %1$s · %2$s · %3$s</string>
+    <string name="notif_first_class">Pierwsze zajęcia</string>
+    <string name="notif_break">Przerwa</string>
+
+    <!-- Widget -->
+    <string name="widget_now">● Teraz</string>
+    <string name="widget_next">→ Następne · %1$s</string>
+    <string name="widget_open_app">Otwórz Plan UBB, aby wczytać plan</string>
+</resources>

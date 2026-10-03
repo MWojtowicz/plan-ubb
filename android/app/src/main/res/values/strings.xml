@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Plan UBB</string>
+    <string name="widget_description">The class running now with a countdown to its end, or the next one.</string>
+
+    <!-- Tabs -->
+    <string name="tab_upcoming">Upcoming</string>
+    <string name="tab_week">Week</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Common -->
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="try_again">Try again</string>
+    <string name="downloading_plan">Downloading plan…</string>
+    <string name="now">Now</string>
+    <string name="today_day">Today · %1$s</string>
+    <string name="tomorrow_day">Tomorrow · %1$s</string>
+    <string name="time_range">%1$s – %2$s</string>
+
+    <!-- Upcoming -->
+    <string name="next_class">Next: %1$s</string>
+    <string name="no_upcoming_title">No upcoming classes</string>
+    <string name="no_upcoming_message">There are no more classes in this plan.</string>
+    <string name="no_schedule_title">No schedule yet</string>
+    <string name="no_schedule_message">Pull to refresh.</string>
+
+    <!-- Class rows and details -->
+    <string name="ends_in">Ends in %1$s</string>
+    <string name="until_time">until %1$s</string>
+    <string name="detail_when">When</string>
+    <string name="detail_date">Date</string>
+    <string name="detail_time">Time</string>
+    <string name="detail_duration">Duration</string>
+    <string name="detail_room">Room</string>
+    <string name="detail_rooms">Rooms</string>
+    <string name="detail_teacher">Teacher</string>
+    <string name="detail_teachers">Teachers</string>
+
+    <!-- Durations -->
+    <string name="duration_hours">%1$d h</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="in_hours">in %1$d h</string>
+    <string name="in_minutes">in %1$d min</string>
+    <string name="in_hours_minutes">in %1$d h %2$d min</string>
+    <plurals name="in_days">
+        <item quantity="one">in %1$d day</item>
+        <item quantity="other">in %1$d days</item>
+    </plurals>
+
+    <!-- Week -->
+    <string name="today">Today</string>
+    <string name="weeks">Weeks</string>
+    <string name="previous_week">Previous week</string>
+    <string name="next_week">Next week</string>
+    <string name="no_classes">No classes</string>
+    <string name="no_classes_this_week">No classes this week</string>
+    <string name="go_to_next_week_with_classes">Go to next week with classes</string>
+    <plurals name="class_count">
+        <item quantity="one">%1$d class</item>
+        <item quantity="other">%1$d classes</item>
+    </plurals>
+    <!-- "12 classes · 18 h" -->
+    <string name="week_summary">%1$s · %2$s h</string>
+
+    <!-- Settings -->
+    <string name="settings_plan">Plan</string>
+    <string name="settings_classes">Classes</string>
+    <string name="settings_updated">Updated</string>
+    <string name="just_now">Just now</string>
+    <string name="never">Never</string>
+    <string name="change_group">Change group…</string>
+    <string name="refresh_now">Refresh now</string>
+    <string name="live_notification">Live notification</string>
+    <string name="show_during_classes">Show during classes</string>
+    <string name="live_notification_description">Shows today\'s classes on the lock screen and in the status bar: a countdown, the room, and a timeline of the day. It appears an hour before the first class and goes away after the last one.</string>
+    <string name="notifications_off">Notifications are off for Plan UBB.</string>
+    <string name="open_settings">Open settings</string>
+    <string name="live_updates_off">Live updates are off for Plan UBB, so the notification won\'t be pinned to the top of the lock screen.</string>
+    <string name="turn_on">Turn on</string>
+    <string name="plan_address">Plan address</string>
+    <string name="plan_url_or_id">Plan URL or ID</string>
+    <string name="invalid_plan">That doesn\'t look like a plan URL or numeric ID.</string>
+    <string name="use_this_plan">Use this plan</string>
+    <string name="open_on_site">Open on plany.ubb.edu.pl</string>
+    <string name="plan_address_footer">Or paste the address of any plan from plany.ubb.edu.pl (group, teacher or room). Current: type %1$d, id %2$d.</string>
+
+    <!-- Group picker -->
+    <string name="choose_group">Choose group</string>
+    <string name="choose_your_group">Choose your group</string>
+    <string name="picker_intro">Go through your department, study mode, course and semester down to your group and lab subgroup. You can change it later in Settings.</string>
+    <string name="search">Search</string>
+    <string name="nothing_here">Nothing here.</string>
+    <string name="use_whole_plan">Use the whole %1$s plan</string>
+    <string name="use_whole_plan_footer">Shows the classes of every group below.</string>
+    <string name="current">Current</string>
+    <string name="tree_semester">Semester %1$s</string>
+    <string name="tree_group">Group %1$s</string>
+    <string name="tree_subgroup">Subgroup %1$s</string>
+
+    <!-- Class kinds -->
+    <string name="kind_lecture">Lecture</string>
+    <string name="kind_laboratory">Laboratory</string>
+    <string name="kind_exercises">Exercises</string>
+    <string name="kind_language">Language class</string>
+    <string name="kind_project">Project</string>
+    <string name="kind_seminar">Seminar</string>
+    <string name="kind_pe">Physical education</string>
+    <string name="kind_class">Class</string>
+
+    <!-- Errors -->
+    <string name="error_http">The plan server responded with HTTP %1$d.</string>
+    <string name="error_not_calendar">The plan server did not return a calendar. Check the plan in Settings.</string>
+    <string name="error_offline">Can\'t reach plany.ubb.edu.pl. Check your internet connection.</string>
+    <string name="error_timeout">The plan server isn\'t responding. Try again later.</string>
+    <string name="error_download">Couldn\'t download the plan.</string>
+    <string name="error_load_list">Couldn\'t load the list.</string>
+
+    <!-- Live notification -->
+    <string name="channel_name">Classes today</string>
+    <string name="channel_description">A live countdown, the room and a timeline of today\'s classes.</string>
+    <string name="notif_title">%1$s · %2$s</string>
+    <string name="notif_next_title">Next: %1$s · %2$s</string>
+    <!-- "Lecture until 14:30 · dr Nowak" -->
+    <string name="notif_in_class">%1$s until %2$s · %3$s</string>
+    <!-- "Lecture at 14:30 · dr Nowak" -->
+    <string name="notif_waiting">%1$s at %2$s · %3$s</string>
+    <string name="notif_next_line">Next %1$s · %2$s · %3$s</string>
+    <string name="notif_first_class">First class</string>
+    <string name="notif_break">Break</string>
+
+    <!-- Widget -->
+    <string name="widget_now">● Now</string>
+    <string name="widget_next">→ Next · %1$s</string>
+    <string name="widget_open_app">Open Plan UBB to load the plan</string>
+</resources>

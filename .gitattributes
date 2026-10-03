@@ -1,0 +1,3 @@
+# Real captured server responses: keep them byte for byte (some use CRLF).
+test-fixtures/** -text
+*.bat text eol=crlf

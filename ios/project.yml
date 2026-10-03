@@ -1,0 +1,123 @@
+name: PlanUbb
+options:
+  bundleIdPrefix: it.mwojtowicz
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    # Set your Apple Developer team ID here (or in Xcode) to run on a device.
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  PlanUbb:
+    type: application
+    platform: iOS
+    sources:
+      - App
+      - Shared
+    dependencies:
+      - target: PlanUbbWidget
+    entitlements:
+      path: App/PlanUbb.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.it.mwojtowicz.PlanUbb
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Plan UBB
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        ITSAppUsesNonExemptEncryption: false
+        NSSupportsLiveActivities: true
+        UIBackgroundModes:
+          - fetch
+        BGTaskSchedulerPermittedIdentifiers:
+          - it.mwojtowicz.PlanUbb.liveActivity
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: it.mwojtowicz.PlanUbb
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1"
+
+  PlanUbbWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Widget
+      - Shared
+    entitlements:
+      path: Widget/PlanUbbWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.it.mwojtowicz.PlanUbb
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: Plan UBB
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: it.mwojtowicz.PlanUbb.Widget
+        TARGETED_DEVICE_FAMILY: "1"
+        SKIP_INSTALL: YES
+
+  PlanUbbTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+      - path: ../test-fixtures
+        type: folder
+        buildPhase: resources
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: it.mwojtowicz.PlanUbbTests
+        GENERATE_INFOPLIST_FILE: YES
+
+  PlanUbbUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - UITests
+    dependencies:
+      - target: PlanUbb
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: it.mwojtowicz.PlanUbbUITests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: PlanUbb
+
+schemes:
+  PlanUbb:
+    build:
+      targets:
+        PlanUbb: all
+    test:
+      targets:
+        - PlanUbbTests
+        - PlanUbbUITests
+  PlanUbbWidget:
+    build:
+      targets:
+        PlanUbbWidget: all
+        PlanUbb: all
+    run:
+      executable: PlanUbb
