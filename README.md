@@ -31,7 +31,7 @@ DEVICE_ID=<udid> TEAM_ID=<team> ios/install-on-device.sh
 ```
 
 - The phone must be unlocked and paired ("Trust This Computer"). `xcrun devicectl list devices` shows the UDIDs.
-- The team defaults to `SXHAS82KZJ`. Pass yours with `TEAM_ID`; find it in Xcode → Settings → Accounts.
+- Sign in to Xcode with your Apple ID first (Xcode → Settings → Accounts). The script uses that account's team, preferring the free personal team. If you have several paid teams, it lists them and asks you to choose one with `TEAM_ID`.
 - Xcode renews the provisioning profiles when needed (`-allowProvisioningUpdates`). The build goes to `ios/build/device`.
 - On the first install, iOS may refuse to open the app until you trust your Apple ID in Settings → General → VPN & Device Management.
 - Apps signed with a free team stop opening after 7 days. Run the script again to re-sign and reinstall them.
