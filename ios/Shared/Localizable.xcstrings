@@ -1,41 +1,45 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%@ %@ %@": {
-      "shouldTranslate": false
+  "sourceLanguage" : "en",
+  "strings" : {
+    "· %@" : {
+      "shouldTranslate" : false
     },
-    "%@ %@ %@ %@": {
-      "shouldTranslate": false
+    "%@ · %@" : {
+      "shouldTranslate" : false
     },
-    "%@ · %@": {
-      "shouldTranslate": false
+    "%@ · %@ · %@" : {
+      "shouldTranslate" : false
     },
-    "%@ · %@ · %@": {
-      "shouldTranslate": false
+    "%@ %@ %@" : {
+      "shouldTranslate" : false
     },
-    "%lld classes · %@ h": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%#@classes@ · %2$@ h"
+    "%@ %@ %@ %@" : {
+      "shouldTranslate" : false
+    },
+    "%lld classes · %@ h" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@classes@ · %2$@ h"
           },
-          "substitutions": {
-            "classes": {
-              "argNum": 1,
-              "formatSpecifier": "lld",
-              "variations": {
-                "plural": {
-                  "one": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "%arg class"
+          "substitutions" : {
+            "classes" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg class"
                     }
                   },
-                  "other": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "%arg classes"
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg classes"
                     }
                   }
                 }
@@ -43,39 +47,39 @@
             }
           }
         },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%#@classes@ · %2$@ godz."
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@classes@ · %2$@ godz."
           },
-          "substitutions": {
-            "classes": {
-              "argNum": 1,
-              "formatSpecifier": "lld",
-              "variations": {
-                "plural": {
-                  "one": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "%arg zajęcia"
+          "substitutions" : {
+            "classes" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "few" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg zajęcia"
                     }
                   },
-                  "few": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "%arg zajęcia"
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg zajęć"
                     }
                   },
-                  "many": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "%arg zajęć"
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg zajęcia"
                     }
                   },
-                  "other": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "%arg zajęcia"
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg zajęcia"
                     }
                   }
                 }
@@ -85,789 +89,867 @@
         }
       }
     },
-    "BREAK · NEXT CLASS IN": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PRZERWA · NASTĘPNE ZAJĘCIA ZA"
+    "BREAK · NEXT CLASS IN" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PRZERWA · NASTĘPNE ZAJĘCIA ZA"
           }
         }
       }
     },
-    "Cancel": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anuluj"
+    "Cancel" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anuluj"
           }
         }
       }
     },
-    "Change group…": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zmień grupę…"
+    "Change group…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmień grupę…"
           }
         }
       }
     },
-    "Choose group": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wybierz grupę"
+    "Choose group" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz grupę"
           }
         }
       }
     },
-    "Choose your group": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wybierz swoją grupę"
+    "Choose your group" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz swoją grupę"
           }
         }
       }
     },
-    "Class": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zajęcia"
+    "Class" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zajęcia"
           }
         }
       }
     },
-    "Classes": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zajęcia"
+    "Classes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zajęcia"
           }
         }
       }
     },
-    "Current class": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bieżące zajęcia"
+    "Current class" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bieżące zajęcia"
           }
         }
       }
     },
-    "Date": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Data"
+    "Date" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data"
           }
         }
       }
     },
-    "DONE FOR TODAY": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "KONIEC NA DZIŚ"
+    "DONE FOR TODAY" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KONIEC NA DZIŚ"
           }
         }
       }
     },
-    "Downloading plan…": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pobieranie planu…"
+    "Downloading plan…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pobieranie planu…"
           }
         }
       }
     },
-    "Duration": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Czas trwania"
+    "Duration" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czas trwania"
           }
         }
       }
     },
-    "Ends in %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Koniec za %@"
+    "Ends in %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koniec za %@"
           }
         }
       }
     },
-    "Exercises": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ćwiczenia"
+    "Exercises" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ćwiczenia"
           }
         }
       }
     },
-    "FIRST CLASS IN": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PIERWSZE ZAJĘCIA ZA"
+    "First class · %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pierwsze zajęcia · %@"
           }
         }
       }
     },
-    "Go through your department, study mode, course and semester down to your group and lab subgroup. You can change it later in Settings.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wybierz wydział, tryb studiów, kierunek i semestr, aż dojdziesz do swojej grupy i podgrupy laboratoryjnej. Możesz to później zmienić w Ustawieniach."
+    "FIRST CLASS IN" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PIERWSZE ZAJĘCIA ZA"
           }
         }
       }
     },
-    "Go to next week with classes": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Przejdź do najbliższego tygodnia z zajęciami"
+    "Go through your department, study mode, course and semester down to your group and lab subgroup. You can change it later in Settings." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz wydział, tryb studiów, kierunek i semestr, aż dojdziesz do swojej grupy i podgrupy laboratoryjnej. Możesz to później zmienić w Ustawieniach."
           }
         }
       }
     },
-    "Group %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grupa %@"
+    "Go to next week with classes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przejdź do najbliższego tygodnia z zajęciami"
           }
         }
       }
     },
-    "Laboratory": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laboratorium"
+    "Group %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grupa %@"
           }
         }
       }
     },
-    "Language class": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lektorat"
+    "Laboratory" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laboratorium"
           }
         }
       }
     },
-    "Lecture": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wykład"
+    "Language class" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lektorat"
           }
         }
       }
     },
-    "Live Activities are turned off for Plan UBB in the Settings app.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktywności na żywo dla Plan UBB są wyłączone w aplikacji Ustawienia."
+    "Lecture" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wykład"
           }
         }
       }
     },
-    "Live Activity": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktywność na żywo"
+    "Live Activities are turned off for Plan UBB in the Settings app." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktywności na żywo dla Plan UBB są wyłączone w aplikacji Ustawienia."
           }
         }
       }
     },
-    "Never": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nigdy"
+    "Live Activity" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktywność na żywo"
           }
         }
       }
     },
-    "Next %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Następne %@"
+    "Never" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nigdy"
           }
         }
       }
     },
-    "Next %@ · %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Następne %1$@ · %2$@"
+    "Next · %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Następne · %@"
           }
         }
       }
     },
-    "Next · %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Następne · %@"
+    "Next %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Następne %@"
           }
         }
       }
     },
-    "Next: %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Następne: %@"
+    "Next %@ · %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Następne %1$@ · %2$@"
           }
         }
       }
     },
-    "No classes": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Brak zajęć"
+    "Next: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Następne: %@"
           }
         }
       }
     },
-    "No classes this week": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Brak zajęć w tym tygodniu"
+    "No classes" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak zajęć"
           }
         }
       }
     },
-    "No more classes today": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dziś nie ma już zajęć"
+    "No classes this week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak zajęć w tym tygodniu"
           }
         }
       }
     },
-    "No schedule yet": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Brak planu"
+    "No more classes today" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dziś nie ma już zajęć"
           }
         }
       }
     },
-    "No upcoming classes": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Brak nadchodzących zajęć"
+    "No schedule yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak planu"
           }
         }
       }
     },
-    "Nothing here.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nic tu nie ma."
+    "No upcoming classes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak nadchodzących zajęć"
           }
         }
       }
     },
-    "Now": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Teraz"
+    "Nothing here." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nic tu nie ma."
           }
         }
       }
     },
-    "NOW · %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "TERAZ · %@"
+    "Now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teraz"
           }
         }
       }
     },
-    "Open plan on plany.ubb.edu.pl": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otwórz plan na plany.ubb.edu.pl"
+    "NOW · %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TERAZ · %@"
           }
         }
       }
     },
-    "Open Plan UBB to load": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otwórz Plan UBB, aby wczytać"
+    "Open plan on plany.ubb.edu.pl" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz plan na plany.ubb.edu.pl"
           }
         }
       }
     },
-    "Open Plan UBB to load the plan": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otwórz Plan UBB, aby wczytać plan"
+    "Open Plan UBB to load" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz Plan UBB, aby wczytać"
           }
         }
       }
     },
-    "Or paste the address of any plan from plany.ubb.edu.pl (group, teacher or room). Current: type %lld, id %lld.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Możesz też wkleić adres dowolnego planu z plany.ubb.edu.pl (grupy, prowadzącego lub sali). Obecny: typ %1$lld, id %2$lld."
+    "Open Plan UBB to load the plan" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz Plan UBB, aby wczytać plan"
           }
         }
       }
     },
-    "Physical education": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wychowanie fizyczne"
+    "Or paste the address of any plan from plany.ubb.edu.pl (group, teacher or room). Current: type %@, id %@." : {
+      "comment" : "A description of how to change the plan.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Or paste the address of any plan from plany.ubb.edu.pl (group, teacher or room). Current: type %1$@, id %2$@."
           }
         }
       }
     },
-    "Plan": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plan"
+    "Or paste the address of any plan from plany.ubb.edu.pl (group, teacher or room). Current: type %lld, id %lld." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Możesz też wkleić adres dowolnego planu z plany.ubb.edu.pl (grupy, prowadzącego lub sali). Obecny: typ %1$lld, id %2$lld."
           }
         }
       }
     },
-    "Plan address": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adres planu"
+    "Physical education" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wychowanie fizyczne"
           }
         }
       }
     },
-    "Plan URL or ID": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adres URL lub ID planu"
+    "Plan" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan"
           }
         }
       }
     },
-    "Project": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Projekt"
+    "Plan address" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adres planu"
           }
         }
       }
     },
-    "Pull to refresh.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Przeciągnij w dół, aby odświeżyć."
+    "Plan URL or ID" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adres URL lub ID planu"
           }
         }
       }
     },
-    "Refresh now": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Odśwież teraz"
+    "Project" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projekt"
           }
         }
       }
     },
-    "Room": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sala"
+    "Pull to refresh." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przeciągnij w dół, aby odświeżyć."
           }
         }
       }
     },
-    "Rooms": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sale"
+    "Refresh now" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odśwież teraz"
           }
         }
       }
     },
-    "Semester %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Semestr %@"
+    "Room" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sala"
           }
         }
       }
     },
-    "Seminar": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seminarium"
+    "Rooms" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sale"
           }
         }
       }
     },
-    "Settings": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ustawienia"
+    "Semester %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semestr %@"
           }
         }
       }
     },
-    "Show during classes": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pokazuj w trakcie zajęć"
+    "Seminar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seminarium"
           }
         }
       }
     },
-    "Shows the classes of every group below.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pokazuje zajęcia wszystkich grup poniżej."
+    "Settings" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ustawienia"
           }
         }
       }
     },
-    "Shows today's classes on the Lock Screen and in the Dynamic Island: a countdown, the room, and a timeline of the day. It starts when you open the app during a class or up to an hour before one, and ends after the last class. iOS limits a Live Activity to 8 hours, so on long days open the app again to restart it.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pokazuje dzisiejsze zajęcia na ekranie blokady i w Dynamic Island: odliczanie, salę i oś czasu dnia. Uruchamia się, gdy otworzysz aplikację w trakcie zajęć lub do godziny przed nimi, i kończy się po ostatnich zajęciach. iOS ogranicza aktywność na żywo do 8 godzin, więc w długie dni otwórz aplikację ponownie, aby ją wznowić."
+    "Show during classes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokazuj w trakcie zajęć"
           }
         }
       }
     },
-    "Start now": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uruchom teraz"
+    "Shows the classes of every group below." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokazuje zajęcia wszystkich grup poniżej."
           }
         }
       }
     },
-    "Subgroup %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Podgrupa %@"
+    "Shows today's classes on the Lock Screen and in the Dynamic Island: a countdown, the room, and a timeline of the day. It starts with the first class and ends after the last one. On iOS 26 and later it starts by itself; on older versions, open the app during the day. iOS limits a Live Activity to 8 hours, so on long days open the app again to restart it." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokazuje dzisiejsze zajęcia na ekranie blokady i w Dynamic Island: odliczanie, salę i oś czasu dnia. Zaczyna się wraz z pierwszymi zajęciami i kończy po ostatnich. W iOS 26 i nowszym uruchamia się sama; w starszych wersjach otwórz aplikację w ciągu dnia. iOS ogranicza aktywność na żywo do 8 godzin, więc w długie dni otwórz aplikację ponownie, aby ją wznowić."
           }
         }
       }
     },
-    "Teacher": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prowadzący"
+    "Start now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uruchom teraz"
           }
         }
       }
     },
-    "Teachers": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prowadzący"
+    "Subgroup %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podgrupa %@"
           }
         }
       }
     },
-    "That doesn't look like a plan URL or numeric ID.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To nie wygląda na adres URL ani na numeryczne ID planu."
+    "Teacher" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prowadzący"
           }
         }
       }
     },
-    "The class running now with a countdown to its end, or the next one.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trwające zajęcia z odliczaniem do ich końca albo najbliższe zajęcia."
+    "Teachers" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prowadzący"
           }
         }
       }
     },
-    "The plan server did not return a calendar. Check the plan URL in Settings.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Serwer planu nie zwrócił kalendarza. Sprawdź adres planu w Ustawieniach."
+    "That doesn't look like a plan URL or numeric ID." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To nie wygląda na adres URL ani na numeryczne ID planu."
           }
         }
       }
     },
-    "The plan server responded with HTTP %lld.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Serwer planu odpowiedział kodem HTTP %lld."
+    "The class running now with a countdown to its end, or the next one." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trwające zajęcia z odliczaniem do ich końca albo najbliższe zajęcia."
           }
         }
       }
     },
-    "There are no more classes in this plan.": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "W tym planie nie ma już więcej zajęć."
+    "The plan server did not return a calendar. Check the plan URL in Settings." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serwer planu nie zwrócił kalendarza. Sprawdź adres planu w Ustawieniach."
           }
         }
       }
     },
-    "Time": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Godzina"
+    "The plan server responded with HTTP %lld." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serwer planu odpowiedział kodem HTTP %lld."
           }
         }
       }
     },
-    "Today": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dziś"
+    "There are no more classes in this plan." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W tym planie nie ma już więcej zajęć."
           }
         }
       }
     },
-    "Today · %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dziś · %@"
+    "Time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Godzina"
           }
         }
       }
     },
-    "Tomorrow · %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jutro · %@"
+    "Today" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dziś"
           }
         }
       }
     },
-    "Try again": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spróbuj ponownie"
+    "Today · %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dziś · %@"
           }
         }
       }
     },
-    "until %@": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "do %@"
+    "Tomorrow · %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jutro · %@"
           }
         }
       }
     },
-    "Upcoming": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Najbliższe"
+    "Try again" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spróbuj ponownie"
           }
         }
       }
     },
-    "Update now": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zaktualizuj teraz"
+    "until %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "do %@"
           }
         }
       }
     },
-    "Updated": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zaktualizowano"
+    "Upcoming" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Najbliższe"
           }
         }
       }
     },
-    "Use the whole %@ plan": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Użyj całego planu %@"
+    "Update now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaktualizuj teraz"
           }
         }
       }
     },
-    "Use this plan": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Użyj tego planu"
+    "Updated" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaktualizowano"
           }
         }
       }
     },
-    "Week": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tydzień"
+    "Use the whole %@ plan" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj całego planu %@"
           }
         }
       }
     },
-    "Weeks": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tygodnie"
+    "Use this plan" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj tego planu"
           }
         }
       }
     },
-    "When": {
-      "localizations": {
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kiedy"
+    "Week" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tydzień"
           }
         }
       }
     },
-    "· %@": {
-      "shouldTranslate": false
+    "Weeks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tygodnie"
+          }
+        }
+      }
+    },
+    "When" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kiedy"
+          }
+        }
+      }
     }
   },
-  "version": "1.0"
+  "version" : "1.1"
 }

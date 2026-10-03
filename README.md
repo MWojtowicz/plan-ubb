@@ -51,6 +51,19 @@ DEVICE_ID=<serial> android/install-on-device.sh
 - Release builds are signed with the local debug key (`~/.android/debug.keystore`, created if missing), so debug and release installs can replace each other. The key is passed as Gradle properties, so there's no signing config in `build.gradle.kts`. Use a real key for anything you publish.
 - Unlike the iOS free team, the install doesn't expire.
 
+### Releasing the Android app
+
+```sh
+android/build-release.sh    # → android/build/release/plan-ubb-<version>.apk
+```
+
+It runs the unit tests, then builds the release APK signed with the Plan UBB release key, ready to attach to a GitHub release.
+The first run creates that key: `~/.android/planubb-release.jks`, with a random password in the macOS Keychain (item `planubb-release-keystore`).
+**Back up both.** Every update has to be signed with the same key, or Android won't install it over the previous version.
+Raise `versionCode` and `versionName` in `android/app/build.gradle.kts` before each release.
+
+Copies installed by `install-on-device.sh` are signed with the debug key, so a release APK can't be installed over them (and the other way round). Uninstall first, which deletes the app's data.
+
 ## Features
 
 - **Group picker**: department → study mode → course → degree → semester → group → lab subgroup.
@@ -62,15 +75,17 @@ DEVICE_ID=<serial> android/install-on-device.sh
   It shows a countdown to the end of the running class, with its subject, room and teacher. Between classes it shows the next one.
 - **Live Activity**: a Lock Screen banner and Dynamic Island for the class day.
   It shows a big countdown, the room, the subject and teacher, and a timeline of the whole day (the expanded Dynamic Island also has a progress bar for the class).
-  It starts when you open the app during a class or up to an hour before one (or with Settings → Start now).
-  It ends when the day's classes are over. You can turn it off in Settings.
+  It's up from the start of the day's first class to the end of the last one.
+  On iOS 26+ it starts by itself (scheduled ahead); on older versions it starts when you open the app during the day (or with Settings → Start now).
+  Turn it on or off with the button at the top of Upcoming, or in Settings.
 
 ### How the Live Activity stays current
 
-There's no push server, so the app can only start the activity while it's open.
+There's no push server, so the app can only start the activity while it's open, except that on iOS 26+ it schedules the next class day's activity (`Activity.request(…, start:)`) and the system starts it at the first class, with a short alert.
 The activity's state holds the whole day's classes, and the views work out "in class / break / done" when they render.
 Countdowns and progress bars are drawn by the system, so they keep ticking with no updates.
 At each class start or end, the app sets `staleDate` (so the system redraws the banner then) and asks for a background refresh to push a fresh update.
+When the last class ends, the banner switches to "Done for today", and the app ends the activity at the next background refresh or when you open it. iOS gives no exact time for background refreshes, and without a push server the app can't end it at a set time.
 iOS limits a Live Activity to 8 hours, so on very long days you need to open the app again.
 
 ## Languages
@@ -157,12 +172,12 @@ Tests (from `ios/`): `xcodebuild -scheme PlanUbb -destination 'platform=iOS Simu
 | Upcoming / Week / Settings tabs | Same screens, Material 3 (dynamic colours on Android 12+) |
 | First-launch group picker | Same tree, same short names, search on long levels |
 | WidgetKit "Current class" widget | Glance home-screen widget, with a system `Chronometer` countdown |
-| Live Activity (Lock Screen + Dynamic Island) | Ongoing notification promoted to a **Live Update** on Android 16+: status-bar countdown chip, and a `ProgressStyle` bar that shows the day's timeline (a coloured segment per class, grey for breaks) |
+| Live Activity (Lock Screen + Dynamic Island) | Ongoing notification promoted to a **Live Update** on Android 16+, with a status-bar countdown chip. Android 17+: `MetricStyle`, laid out like the iOS banner (countdown, room, next class's room and time). Android 16 and older: a `ProgressStyle` bar that shows the day's timeline (a coloured segment per class, grey for breaks) |
 | Background refresh at class boundaries | Inexact `AlarmManager` alarms at each class start/end and every 5 min while the notification is up; `WorkManager` re-downloads the plan every 6 h |
 
 Unlike iOS, Android lets the app post the notification from the background.
-So it appears on its own an hour before the first class, with no need to open the app, and goes away after the last class.
-If you swipe it away, it stays hidden until the next day.
+So it appears on its own when the first class starts, with no need to open the app, and goes away exactly when the last class ends (`setTimeoutAfter`).
+If you swipe it away, it stays hidden until the next day, unless you turn it back on with the button on Upcoming.
 
 Layout:
 

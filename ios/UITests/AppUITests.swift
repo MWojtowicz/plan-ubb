@@ -79,6 +79,23 @@ final class AppUITests: XCTestCase {
         }
     }
 
+    /// The Live Activity button on Upcoming switches the setting, and Settings shows the same state.
+    func testLiveActivityButton() {
+        let button = app.navigationBars["Upcoming"].buttons["Live Activity"]
+        XCTAssertTrue(button.waitForExistence(timeout: 5))
+        // A button-style toggle in the toolbar reports its state as "selected" (as VoiceOver reads it).
+        let wasOn = button.isSelected
+        button.tap()
+        XCTAssertEqual(button.isSelected, !wasOn)
+        tab("Settings")
+        let toggle = app.switches["Show during classes"]
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertEqual(toggle.value as? String, wasOn ? "0" : "1")
+        tab("Upcoming")
+        button.tap()
+        XCTAssertEqual(button.isSelected, wasOn)
+    }
+
     func testStaysResponsiveAfterLockAndUnlock() {
         assertResponsive("before locking")
         tab("Week")

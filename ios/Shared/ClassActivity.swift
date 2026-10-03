@@ -76,6 +76,12 @@ extension ClassActivityAttributes.ContentState {
         classes.flatMap { [$0.start, $0.end] }.filter { $0 > date }.min()
     }
 
+    /// Whether the activity should be up: from the start of the first class to the end of the last one.
+    func isLive(at date: Date) -> Bool {
+        guard let first = classes.first, let end = classes.map(\.end).max() else { return false }
+        return first.start <= date && date < end
+    }
+
     var dayRange: ClosedRange<Date>? {
         guard let first = classes.first, let last = classes.map(\.end).max() else { return nil }
         return first.start...last

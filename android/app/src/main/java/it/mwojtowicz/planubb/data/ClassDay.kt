@@ -32,6 +32,13 @@ data class ClassDay(
     val start: Instant? get() = classes.firstOrNull()?.start
     val end: Instant? get() = classes.maxOfOrNull { it.end }
 
+    /** Whether the live notification is up: from the start of the first class to the end of the last one. */
+    fun isLive(at: Instant): Boolean {
+        val start = start ?: return false
+        val end = end ?: return false
+        return !at.isBefore(start) && at.isBefore(end)
+    }
+
     companion object {
         /** The classes of the day containing [at], or null once they're all over. */
         fun of(snapshot: ScheduleSnapshot, at: Instant, zone: ZoneId = ZoneId.systemDefault()): ClassDay? {

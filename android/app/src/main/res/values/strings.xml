@@ -74,7 +74,7 @@
     <string name="refresh_now">Refresh now</string>
     <string name="live_notification">Live notification</string>
     <string name="show_during_classes">Show during classes</string>
-    <string name="live_notification_description">Shows today\'s classes on the lock screen and in the status bar: a countdown, the room, and a timeline of the day. It appears an hour before the first class and goes away after the last one.</string>
+    <string name="live_notification_description">Shows today\'s classes on the lock screen and in the status bar: a countdown, the room, and a timeline of the day. It appears when the first class starts and goes away after the last one.</string>
     <string name="notifications_off">Notifications are off for Plan UBB.</string>
     <string name="open_settings">Open settings</string>
     <string name="live_updates_off">Live updates are off for Plan UBB, so the notification won\'t be pinned to the top of the lock screen.</string>
@@ -129,6 +129,15 @@
     <string name="notif_next_line">Next %1$s · %2$s · %3$s</string>
     <string name="notif_first_class">First class</string>
     <string name="notif_break">Break</string>
+
+    <!-- Live notification metrics (Android 17+) and header -->
+    <string name="live_header_now">Now · %1$s</string>
+    <string name="live_ends_in">Ends in</string>
+    <string name="live_starts_in">Starts in</string>
+    <string name="live_next_at">→ %1$s</string>
+    <!-- The on/off button on Upcoming (accessibility labels) -->
+    <string name="live_turn_off">Live notification is on. Turn off</string>
+    <string name="live_turn_on">Live notification is off. Turn on</string>
 
     <!-- Widget -->
     <string name="widget_now">● Now</string>

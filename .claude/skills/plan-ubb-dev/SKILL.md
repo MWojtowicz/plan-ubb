@@ -23,6 +23,19 @@ android/install-on-device.sh    # release build signed with ~/.android/debug.key
 - Without `TEAM_ID`, the iOS script reads the team from Xcode's accounts (`defaults export com.apple.dt.Xcode -` → `IDEProvisioningTeamByIdentifier`), preferring the free personal team. Don't hard-code a team ID. The signing certificate's `OU` field holds the team ID too, but the ID in brackets in its name doesn't.
 - Free-team iOS installs expire after 7 days; rerunning the script re-signs.
 
+## Android release
+
+`android/build-release.sh` builds `android/build/release/plan-ubb-<version>.apk`, signed with the release key `~/.android/planubb-release.jks`. Its password is in the Keychain item `planubb-release-keystore`; never print it or put it in the repo. If the keystore is missing but the Keychain item exists, stop and ask the user to restore the backup. Don't create a new key: installed copies couldn't be updated. Release and debug-signed installs can't replace each other.
+
+## Live notification (Android) and Live Activity (iOS)
+
+Both are up from the start of the day's first class to the end of the last one, and the button on Upcoming turns them on/off (same setting as the Settings switch).
+
+- Android 17+ uses `Notification.MetricStyle` (platform API, not in NotificationCompat); Android 16 and older the `ProgressStyle` timeline. Metrics are narrow: a time as a value gets cut off with a 12-hour clock ("11:30 …"), and labels fit only about 12 characters, so the next class shows as "→ 11:30" over its room. The first metric is the critical one (the status bar chip); don't add a header timer, it repeats it.
+- The notification removes itself at the end of the day with `setTimeoutAfter` (the alarms are inexact). That removal also fires the delete intent, so `dismissedByUser` ignores removals outside the class day.
+- Test on the Android 17 emulator by moving its clock: `settings put global auto_time 0`, then `cmd alarm set-time <epoch ms>` (the app listens for `TIME_SET`). Unlock with `wm dismiss-keyguard`; show the lock screen with `locksettings set-disabled false` and `KEYCODE_SLEEP`/`KEYCODE_WAKEUP`. Check promotion with `dumpsys notification --noredact` (`PROMOTED_ONGOING`, `template=…MetricStyle`).
+- iOS 26+ schedules the next class day's activity with `Activity.request(…, start:)` (state `.pending`); `.pending` needs `#available(iOS 26.0, *)`. Without a push server, iOS can't end an activity at an exact time: at the last class's end it shows "Done for today" until a background refresh or app launch ends it. Check scheduling in the simulator log: `log show --info --predicate 'subsystem == "it.mwojtowicz.PlanUbb"'`.
+
 ## Tests and checks
 
 ```sh

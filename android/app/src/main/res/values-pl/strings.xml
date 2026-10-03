@@ -76,7 +76,7 @@
     <string name="refresh_now">Odśwież teraz</string>
     <string name="live_notification">Powiadomienie na żywo</string>
     <string name="show_during_classes">Pokazuj w trakcie zajęć</string>
-    <string name="live_notification_description">Pokazuje dzisiejsze zajęcia na ekranie blokady i na pasku stanu: odliczanie, salę i oś czasu dnia. Pojawia się godzinę przed pierwszymi zajęciami i znika po ostatnich.</string>
+    <string name="live_notification_description">Pokazuje dzisiejsze zajęcia na ekranie blokady i na pasku stanu: odliczanie, salę i oś czasu dnia. Pojawia się, gdy zaczynają się pierwsze zajęcia, i znika po ostatnich.</string>
     <string name="notifications_off">Powiadomienia dla Plan UBB są wyłączone.</string>
     <string name="open_settings">Otwórz ustawienia</string>
     <string name="live_updates_off">Aktualizacje na żywo dla Plan UBB są wyłączone, więc powiadomienie nie będzie przypięte na górze ekranu blokady.</string>
@@ -129,6 +129,14 @@
     <string name="notif_next_line">Następne %1$s · %2$s · %3$s</string>
     <string name="notif_first_class">Pierwsze zajęcia</string>
     <string name="notif_break">Przerwa</string>
+
+    <!-- Live notification metrics (Android 17+) and header -->
+    <string name="live_header_now">Teraz · %1$s</string>
+    <string name="live_ends_in">Koniec za</string>
+    <string name="live_starts_in">Początek za</string>
+    <string name="live_next_at">→ %1$s</string>
+    <string name="live_turn_off">Powiadomienie na żywo jest włączone. Wyłącz</string>
+    <string name="live_turn_on">Powiadomienie na żywo jest wyłączone. Włącz</string>
 
     <!-- Widget -->
     <string name="widget_now">● Teraz</string>

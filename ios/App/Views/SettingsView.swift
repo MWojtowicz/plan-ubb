@@ -5,10 +5,10 @@ struct SettingsView: View {
     @State private var planInput = ""
     @State private var inputError: String?
     @State private var showsGroupPicker = false
-    @State private var liveActivityOn = LiveActivityController.isEnabled
     @State private var liveActivityRunning = LiveActivityController.isRunning
 
     var body: some View {
+        @Bindable var model = model
         NavigationStack {
             Form {
                 Section {
@@ -40,9 +40,8 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Toggle("Show during classes", isOn: $liveActivityOn)
-                        .onChange(of: liveActivityOn) { _, on in
-                            LiveActivityController.isEnabled = on
+                    Toggle("Show during classes", isOn: $model.liveActivityEnabled)
+                        .onChange(of: model.liveActivityEnabled) { _, on in
                             if !on { liveActivityRunning = false }
                         }
                     Button(liveActivityRunning ? String(localized: "Update now") : String(localized: "Start now")) {
@@ -56,7 +55,7 @@ struct SettingsView: View {
                     Text("Live Activity")
                 } footer: {
                     if LiveActivityController.isAllowed {
-                        Text("Shows today's classes on the Lock Screen and in the Dynamic Island: a countdown, the room, and a timeline of the day. It starts when you open the app during a class or up to an hour before one, and ends after the last class. iOS limits a Live Activity to 8 hours, so on long days open the app again to restart it.")
+                        Text("Shows today's classes on the Lock Screen and in the Dynamic Island: a countdown, the room, and a timeline of the day. It starts with the first class and ends after the last one. On iOS 26 and later it starts by itself; on older versions, open the app during the day. iOS limits a Live Activity to 8 hours, so on long days open the app again to restart it.")
                     } else {
                         Text("Live Activities are turned off for Plan UBB in the Settings app.")
                     }

@@ -32,10 +32,16 @@ class ScheduleStore private constructor(context: Context) {
             ?: PlanSource.Default
         set(value) = prefs.edit { putString("source", json.encodeToString(PlanSource.serializer(), value)) }
 
-    /** Show the "classes today" live notification. On by default. */
+    private val _liveUpdatesEnabled = MutableStateFlow(prefs.getBoolean("liveUpdatesEnabled", true))
+    /** Show the "classes today" live notification. On by default; the screens follow changes. */
+    val liveUpdates: StateFlow<Boolean> = _liveUpdatesEnabled.asStateFlow()
+
     var liveUpdatesEnabled: Boolean
-        get() = prefs.getBoolean("liveUpdatesEnabled", true)
-        set(value) = prefs.edit { putBoolean("liveUpdatesEnabled", value) }
+        get() = _liveUpdatesEnabled.value
+        set(value) {
+            prefs.edit { putBoolean("liveUpdatesEnabled", value) }
+            _liveUpdatesEnabled.value = value
+        }
 
     fun loadDirectory(): NameDirectory = load("names.json") ?: NameDirectory()
 

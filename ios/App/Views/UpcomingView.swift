@@ -4,6 +4,7 @@ struct UpcomingView: View {
     @Environment(ScheduleViewModel.self) private var model
 
     var body: some View {
+        @Bindable var model = model
         NavigationStack {
             // Re-evaluates every 15 s so "now"/"next" move on; the countdowns themselves
             // are rendered live by the system.
@@ -12,6 +13,15 @@ struct UpcomingView: View {
             }
             .navigationTitle("Upcoming")
             .navigationDestination(for: ClassEvent.self) { ClassDetailView(event: $0) }
+            .toolbar {
+                // Turns the Live Activity on and off; highlighted while it's on.
+                ToolbarItem(placement: .topBarTrailing) {
+                    Toggle(isOn: $model.liveActivityEnabled) {
+                        Label("Live Activity", systemImage: "dot.radiowaves.left.and.right")
+                    }
+                    .toggleStyle(.button)
+                }
+            }
         }
     }
 

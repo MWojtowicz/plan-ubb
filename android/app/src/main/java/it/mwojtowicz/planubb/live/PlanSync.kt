@@ -27,8 +27,7 @@ import java.util.concurrent.TimeUnit
  * Keeps the widget and the live notification in step with the schedule and the clock.
  *
  * Unlike iOS, Android lets the app wake itself up, so an alarm is set for the next moment anything
- * visible changes: a class starting or ending, the live notification's lead time, or (while it's up)
- * the next timeline redraw. Inexact alarms are used, so they can arrive a few minutes late in Doze;
+ * visible changes: a class starting or ending, or (while the live notification is up) the next redraw. Inexact alarms are used, so they can arrive a few minutes late in Doze;
  * the countdowns are system chronometers and stay exact regardless.
  */
 object PlanSync {
@@ -51,7 +50,6 @@ object PlanSync {
         val events = ScheduleStore.get(context).snapshot.value?.events ?: return null
         val candidates = mutableListOf<Instant>()
         events.asSequence().flatMap { sequenceOf(it.start, it.end) }.filter { it.isAfter(now) }.minOrNull()?.let(candidates::add)
-        events.firstOrNull { it.start.isAfter(now) }?.start?.minus(LiveClassNotification.Lead)?.takeIf { it.isAfter(now) }?.let(candidates::add)
         if (showing) candidates += now.plus(LiveClassNotification.RefreshEvery)
         return candidates.minOrNull()
     }

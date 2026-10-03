@@ -50,7 +50,13 @@ fun UpcomingScreen(model: ScheduleViewModel, onOpen: (ClassEvent) -> Unit) {
 
     Scaffold(
         modifier = Modifier.nestedScroll(scroll.nestedScrollConnection),
-        topBar = { LargeTopAppBar(title = { Text(stringResource(R.string.tab_upcoming)) }, scrollBehavior = scroll) },
+        topBar = {
+            LargeTopAppBar(
+                title = { Text(stringResource(R.string.tab_upcoming)) },
+                actions = { LiveToggleButton() },
+                scrollBehavior = scroll,
+            )
+        },
     ) { padding ->
         PullToRefreshBox(
             isRefreshing = isLoading && snapshot != null,

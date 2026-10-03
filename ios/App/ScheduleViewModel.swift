@@ -11,6 +11,10 @@ final class ScheduleViewModel {
     private(set) var source: PlanSource
     /// False on first launch, until a group is picked.
     private(set) var hasChosenSource: Bool
+    /// The Live Activity setting, shared by the button on Upcoming and the switch in Settings.
+    var liveActivityEnabled: Bool {
+        didSet { LiveActivityController.isEnabled = liveActivityEnabled }
+    }
 
     private let store: ScheduleStore
 
@@ -18,6 +22,7 @@ final class ScheduleViewModel {
         self.store = store
         source = store.source
         hasChosenSource = store.hasChosenSource
+        liveActivityEnabled = store.liveActivityEnabled
         snapshot = store.loadSnapshot()
     }
 

@@ -1,14 +1,9 @@
 package it.mwojtowicz.planubb.ui
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
 import android.text.format.DateUtils
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,11 +44,9 @@ import androidx.compose.ui.res.stringResource
 import it.mwojtowicz.planubb.R
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import it.mwojtowicz.planubb.data.PlanSource
-import it.mwojtowicz.planubb.data.ScheduleStore
 import it.mwojtowicz.planubb.live.LiveClassNotification
 import it.mwojtowicz.planubb.live.PlanSync
 
@@ -61,7 +54,6 @@ import it.mwojtowicz.planubb.live.PlanSync
 @Composable
 fun SettingsScreen(model: ScheduleViewModel, onChangeGroup: () -> Unit) {
     val context = LocalContext.current
-    val store = remember { ScheduleStore.get(context) }
     val snapshot by model.snapshot.collectAsStateWithLifecycle()
     val isLoading by model.isLoading.collectAsStateWithLifecycle()
     val error by model.error.collectAsStateWithLifecycle()
@@ -72,7 +64,7 @@ fun SettingsScreen(model: ScheduleViewModel, onChangeGroup: () -> Unit) {
     var planInput by remember(source) { mutableStateOf(source.webUrl) }
     var inputInvalid by remember { mutableStateOf(false) }
 
-    var liveOn by remember { mutableStateOf(store.liveUpdatesEnabled) }
+    val live = rememberLiveToggle()
     var canNotify by remember { mutableStateOf(LiveClassNotification.canPost(context)) }
     var canPromote by remember { mutableStateOf(LiveClassNotification.canPromote(context)) }
     // Re-check when coming back from the system settings.
@@ -80,20 +72,6 @@ fun SettingsScreen(model: ScheduleViewModel, onChangeGroup: () -> Unit) {
         canNotify = LiveClassNotification.canPost(context)
         canPromote = LiveClassNotification.canPromote(context)
         onPauseOrDispose { }
-    }
-    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        canNotify = granted
-        PlanSync.scheduleChanged(context)
-    }
-    fun setLive(on: Boolean) {
-        liveOn = on
-        store.liveUpdatesEnabled = on
-        if (on && Build.VERSION.SDK_INT >= 33 &&
-            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permission.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-        PlanSync.scheduleChanged(context)
     }
 
     Scaffold(
@@ -127,11 +105,11 @@ fun SettingsScreen(model: ScheduleViewModel, onChangeGroup: () -> Unit) {
                     supportingContent = {
                         Text(stringResource(R.string.live_notification_description))
                     },
-                    trailingContent = { Switch(checked = liveOn, onCheckedChange = ::setLive) },
-                    modifier = Modifier.clickable { setLive(!liveOn) },
+                    trailingContent = { Switch(checked = live.isOn, onCheckedChange = live.set) },
+                    modifier = Modifier.clickable { live.set(!live.isOn) },
                 )
             }
-            if (liveOn && !canNotify) {
+            if (live.isOn && !canNotify) {
                 item {
                     Hint(stringResource(R.string.notifications_off), stringResource(R.string.open_settings)) {
                         context.startActivity(
@@ -139,7 +117,7 @@ fun SettingsScreen(model: ScheduleViewModel, onChangeGroup: () -> Unit) {
                         )
                     }
                 }
-            } else if (liveOn && !canPromote) {
+            } else if (live.isOn && !canPromote) {
                 item {
                     Hint(stringResource(R.string.live_updates_off), stringResource(R.string.turn_on)) {
                         LiveClassNotification.openPromotionSettings(context)

@@ -1,6 +1,8 @@
 package it.mwojtowicz.planubb.data
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Assert.assertNull
 import org.junit.Test
 import java.time.Duration
@@ -31,6 +33,15 @@ class ClassDayTest {
         assertEquals(ClassDay.Phase.Waiting(day.classes[1], at(9, 30)), day.phase(at(9, 35)))
         assertEquals(ClassDay.Phase.InClass(day.classes[1], null), day.phase(at(10, 0)))
         assertEquals(ClassDay.Phase.Done, day.phase(at(12, 0)))
+    }
+
+    @Test fun liveFromFirstClassToLastClass() {
+        val day = ClassDay.of(snapshot, at(7, 0), Warsaw)!!
+        assertFalse(day.isLive(at(7, 59)))
+        assertTrue(day.isLive(at(8, 0)))
+        assertTrue(day.isLive(at(9, 35)))  // the break between classes
+        assertTrue(day.isLive(at(11, 14)))
+        assertFalse(day.isLive(at(11, 15)))
     }
 
     @Test fun boundaries() {
