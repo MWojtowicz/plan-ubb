@@ -1,5 +1,8 @@
 # Plan UBB
 
+iOS app (SwiftUI + WidgetKit, in `ios/`) and Android app (Kotlin + Jetpack Compose, in `android/`) for class schedules from [plany.ubb.edu.pl](https://plany.ubb.edu.pl).
+On first launch you pick your group from the same tree as the site's left frame. You can change it later in Settings (or paste any plan URL there).
+
 <p align="center">
   <img src="docs/screenshots/ios-upcoming.png" width="200" alt="iOS: Upcoming tab with the class running now and a countdown">
   <img src="docs/screenshots/ios-week.png" width="200" alt="iOS: Week tab with the week's classes by day">
@@ -12,8 +15,41 @@
 </p>
 <p align="center"><sub>iOS (top) and Android (bottom): Upcoming, Week and a class's details.</sub></p>
 
-iOS app (SwiftUI + WidgetKit, in `ios/`) and Android app (Kotlin + Jetpack Compose, in `android/`) for class schedules from [plany.ubb.edu.pl](https://plany.ubb.edu.pl).
-On first launch you pick your group from the same tree as the site's left frame. You can change it later in Settings (or paste any plan URL there).
+## Installation
+
+Each app has a script that builds it and installs it on a phone connected to your Mac over USB, then opens it.
+
+### iPhone
+
+You need Xcode and [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
+`ios/install-on-device.sh` signs the app with a personal (free) Apple team:
+
+```sh
+ios/install-on-device.sh                              # Release build, first paired iPhone on USB
+CONFIGURATION=Debug ios/install-on-device.sh
+DEVICE_ID=<udid> TEAM_ID=<team> ios/install-on-device.sh
+```
+
+- The phone must be unlocked and paired ("Trust This Computer"). `xcrun devicectl list devices` shows the UDIDs.
+- The team defaults to `SXHAS82KZJ`. Pass yours with `TEAM_ID`; find it in Xcode → Settings → Accounts.
+- Xcode renews the provisioning profiles when needed (`-allowProvisioningUpdates`). The build goes to `ios/build/device`.
+- On the first install, iOS may refuse to open the app until you trust your Apple ID in Settings → General → VPN & Device Management.
+- Apps signed with a free team stop opening after 7 days. Run the script again to re-sign and reinstall them.
+
+### Android
+
+You need a JDK 17+ and the Android SDK (API 37); Android Studio includes both.
+`android/install-on-device.sh` signs the app with your local debug key:
+
+```sh
+android/install-on-device.sh                          # release build, first phone on USB
+BUILD_TYPE=debug android/install-on-device.sh
+DEVICE_ID=<serial> android/install-on-device.sh
+```
+
+- Turn on Developer options → USB debugging on the phone, and accept the "Allow USB debugging" prompt. `adb devices -l` shows the serials.
+- Release builds are signed with the local debug key (`~/.android/debug.keystore`, created if missing), so debug and release installs can replace each other. The key is passed as Gradle properties, so there's no signing config in `build.gradle.kts`. Use a real key for anything you publish.
+- Unlike the iOS free team, the install doesn't expire.
 
 ## Features
 
@@ -96,24 +132,7 @@ open PlanUbb.xcodeproj
 
 To run on a real iPhone, set your team in `ios/project.yml` (`DEVELOPMENT_TEAM`) or in Xcode's Signing settings.
 If the bundle IDs or the App Group are already taken in your account, change `it.mwojtowicz.*` and `group.it.mwojtowicz.PlanUbb` in both `ios/project.yml` and `ios/Shared/ScheduleStore.swift`.
-
-### Installing on an iPhone from the command line
-
-(For Android, see `android/install-on-device.sh` under "Android".)
-
-`ios/install-on-device.sh` builds the app, signs it with the personal (free) team and installs and launches it on the iPhone connected over USB:
-
-```sh
-ios/install-on-device.sh                              # Release build, first paired iPhone on USB
-CONFIGURATION=Debug ios/install-on-device.sh
-DEVICE_ID=<udid> TEAM_ID=<team> ios/install-on-device.sh
-```
-
-- The phone must be unlocked and paired ("Trust This Computer"). `xcrun devicectl list devices` shows the UDIDs.
-- The team defaults to `SXHAS82KZJ`. Find yours in Xcode → Settings → Accounts.
-- Xcode renews the provisioning profiles when needed (`-allowProvisioningUpdates`). The build goes to `ios/build/device`.
-- On the first install, iOS may refuse to open the app until you trust your Apple ID in Settings → General → VPN & Device Management.
-- Apps signed with a free team stop opening after 7 days. Run the script again to re-sign and reinstall them.
+To install from the command line instead, see [Installation](#installation).
 
 Tests (from `ios/`): `xcodebuild -scheme PlanUbb -destination 'platform=iOS Simulator,name=iPhone 18 Pro' test`
 
@@ -164,19 +183,6 @@ export JAVA_HOME="$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Ho
 ./gradlew :app:testDebugUnitTest    # parser + ClassDay tests, using the same test-fixtures/ as iOS
 ```
 
-Or open `android/` in Android Studio.
+Or open `android/` in Android Studio, or see [Installation](#installation) to install from the command line.
 
-### Installing on a phone from the command line
-
-`android/install-on-device.sh` builds the app, signs it and installs and launches it on the phone connected over USB:
-
-```sh
-android/install-on-device.sh                          # release build, first phone on USB
-BUILD_TYPE=debug android/install-on-device.sh
-DEVICE_ID=<serial> android/install-on-device.sh
-```
-
-- Turn on Developer options → USB debugging on the phone, and accept the "Allow USB debugging" prompt. `adb devices -l` shows the serials.
-- Release builds are signed with the local debug key (`~/.android/debug.keystore`, created if missing), so debug and release installs can replace each other. The key is passed as Gradle properties, so there's no signing config in `build.gradle.kts`. Use a real key for anything you publish.
-- Unlike the iOS free team, the install doesn't expire.
 Debug builds take intent extras for testing: `adb shell am start -n it.mwojtowicz.planubb/.ui.MainActivity --ez resetPlan true` brings back the first-launch picker, and `--ei plan 142113` skips it.
