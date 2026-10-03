@@ -1,5 +1,17 @@
 # Plan UBB
 
+<p align="center">
+  <img src="docs/screenshots/ios-upcoming.png" width="200" alt="iOS: Upcoming tab with the class running now and a countdown">
+  <img src="docs/screenshots/ios-week.png" width="200" alt="iOS: Week tab with the week's classes by day">
+  <img src="docs/screenshots/ios-details.png" width="200" alt="iOS: class details with date, time, rooms and teachers">
+</p>
+<p align="center">
+  <img src="docs/screenshots/android-upcoming.png" width="200" alt="Android: Upcoming tab with the class running now and a countdown">
+  <img src="docs/screenshots/android-week.png" width="200" alt="Android: Week tab with the week's classes by day">
+  <img src="docs/screenshots/android-details.png" width="200" alt="Android: class details with date, time, rooms and teachers">
+</p>
+<p align="center"><sub>iOS (top) and Android (bottom): Upcoming, Week and a class's details.</sub></p>
+
 iOS app (SwiftUI + WidgetKit, in `ios/`) and Android app (Kotlin + Jetpack Compose, in `android/`) for class schedules from [plany.ubb.edu.pl](https://plany.ubb.edu.pl).
 On first launch you pick your group from the same tree as the site's left frame. You can change it later in Settings (or paste any plan URL there).
 
@@ -55,9 +67,10 @@ If that cache is older than 6 hours, the widget refreshes it itself.
 ## Project layout
 
 ```
-ios/            iOS app (below)
-android/        Android app (see "Android")
-test-fixtures/  real captured responses, used by the parser tests of both apps
+ios/               iOS app (below)
+android/           Android app (see "Android")
+test-fixtures/     real captured responses, used by the parser tests of both apps
+docs/screenshots/  README screenshots, and frame.py, which draws the phone frames
 ```
 
 iOS, inside `ios/`:
