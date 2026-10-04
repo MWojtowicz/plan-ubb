@@ -40,6 +40,12 @@ enum ICSParser {
         return events.sorted { $0.start < $1.start }
     }
 
+    /// Joins several exports of the same plan, dropping events that appear in more than one.
+    static func merge(_ exports: [[RawICSEvent]]) -> [RawICSEvent] {
+        var seen = Set<RawICSEvent>()
+        return exports.joined().filter { seen.insert($0).inserted }.sorted { $0.start < $1.start }
+    }
+
     private static func unfoldedLines(_ text: String) -> [String] {
         var lines: [String] = []
         let normalized = text.replacingOccurrences(of: "\r\n", with: "\n").replacingOccurrences(of: "\r", with: "\n")

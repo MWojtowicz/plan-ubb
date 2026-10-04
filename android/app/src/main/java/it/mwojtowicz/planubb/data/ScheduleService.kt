@@ -40,7 +40,7 @@ internal suspend fun httpGet(path: String, query: Map<String, Any> = emptyMap())
 /**
  * Downloads a plan from plany.ubb.edu.pl.
  *
- * Events come from the ICS export (whole semester, abbreviated names). Full subject names are taken
+ * Events come from the ICS exports (whole semester, abbreviated names). Full subject names are taken
  * from the legend on the weekly HTML pages, full teacher names from each teacher's own plan page.
  * Name lookups are cached in [NameDirectory].
  */
@@ -53,11 +53,21 @@ class ScheduleService {
         if ("BEGIN:VCALENDAR" !in ics) {
             throw ScheduleException.NotACalendar()
         }
-        val rawEvents = IcsParser.parse(ics)
 
         // The HTML page only adds names; a failure there must not lose the schedule.
         val mainPage = mainHtml.await()?.let(PlanHtmlParser::parse) ?: PlanPage()
         directory.merge(mainPage)
+
+        // The export only has the classes held in the current week's pattern: in an odd week,
+        // classes held in even weeks only ("NZ-P") are missing. The export for each other week
+        // fills them in.
+        val weekExports = mainPage.weeks.map { it.id }.filter { it != mainPage.selectedWeekId }.map { id ->
+            async {
+                runCatching { IcsParser.parse(plan(mapOf("type" to source.type, "id" to source.id, "cvsfile" to "true", "w" to id))) }
+                    .getOrNull()
+            }
+        }.awaitAll().filterNotNull()
+        val rawEvents = IcsParser.merge(listOf(IcsParser.parse(ics)) + weekExports)
 
         // Weekly pages for weeks containing subjects/teachers we can't name yet.
         val weekIds = mainPage.weeks.associate { it.mondayKey to it.id }

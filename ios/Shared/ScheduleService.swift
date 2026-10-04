@@ -14,7 +14,7 @@ enum ScheduleError: LocalizedError {
 
 /// Downloads a plan from plany.ubb.edu.pl.
 ///
-/// Events come from the ICS export (whole semester, abbreviated names). Full subject
+/// Events come from the ICS exports (whole semester, abbreviated names). Full subject
 /// names are taken from the legend on the weekly HTML pages, full teacher names from
 /// each teacher's own plan page. Name lookups are cached in `NameDirectory`.
 struct ScheduleService {
@@ -29,11 +29,19 @@ struct ScheduleService {
 
         let ics = try await icsText
         guard ics.contains("BEGIN:VCALENDAR") else { throw ScheduleError.notACalendar }
-        let rawEvents = ICSParser.parse(ics)
 
         // The HTML page only adds names; a failure there must not lose the schedule.
         let mainPage = (try? await mainHTML).map(PlanHTMLParser.parse) ?? PlanPage()
         directory.merge(mainPage)
+
+        // The export only has the classes held in the current week's pattern: in an odd week,
+        // classes held in even weeks only ("NZ-P") are missing. The export for each other week
+        // fills them in.
+        let otherWeeks = mainPage.weeks.map(\.id).filter { $0 != mainPage.selectedWeekID }
+        let weekExports = await fetchAll(otherWeeks) { id in
+            ICSParser.parse(try await get(["type": source.type, "id": source.id, "cvsfile": "true", "w": id]))
+        }
+        let rawEvents = ICSParser.merge([ICSParser.parse(ics)] + weekExports)
 
         // Weekly pages for weeks containing subjects/teachers we can't name yet.
         let weekIDs = Dictionary(mainPage.weeks.map { ($0.mondayKey, $0.id) }, uniquingKeysWith: { a, _ in a })

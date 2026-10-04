@@ -21,6 +21,21 @@ final class ParserTests: XCTestCase {
         XCTAssertEqual(first.end.timeIntervalSince(first.start), 90 * 60)
     }
 
+    /// plan.ics is the export for an odd week (no `w`); plan_week790.ics the one for an even week.
+    /// Each lacks the classes of the other parity; together they make the whole plan.
+    func testICSExportsOfDifferentWeeksMerge() throws {
+        let odd = ICSParser.parse(try fixture("plan.ics"))
+        let even = ICSParser.parse(try fixture("plan_week790.ics"))
+        XCTAssertFalse(odd.contains { $0.summary.hasPrefix("Mn lab") })
+        XCTAssertFalse(even.contains { $0.summary.hasPrefix("Ak ") })
+
+        let merged = ICSParser.merge([odd, even])
+        XCTAssertEqual(merged.count, 100)
+        XCTAssertEqual(merged.filter { $0.summary == "Mn lab JMr B316" }.count, 4)
+        XCTAssertEqual(merged.filter { $0.summary.hasPrefix("Ak ") }.count, 8)
+        XCTAssertEqual(merged, merged.sorted { $0.start < $1.start })
+    }
+
     func testSummaryWithMultipleTeachersAndRooms() {
         let p = SummaryParser.parse("JaI lek BGó ASzw L334A L324A")
         XCTAssertEqual(p.subjectCode, "JaI")

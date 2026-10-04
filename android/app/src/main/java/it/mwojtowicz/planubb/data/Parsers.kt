@@ -50,6 +50,10 @@ object IcsParser {
         return events.sortedBy { it.start }
     }
 
+    /** Joins several exports of the same plan, dropping events that appear in more than one. */
+    fun merge(exports: List<List<RawIcsEvent>>): List<RawIcsEvent> =
+        exports.flatten().distinct().sortedBy { it.start }
+
     private fun unfoldedLines(text: String): List<String> {
         val lines = mutableListOf<String>()
         val normalized = text.replace("\r\n", "\n").replace("\r", "\n")

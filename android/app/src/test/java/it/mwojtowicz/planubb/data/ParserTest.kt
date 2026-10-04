@@ -24,6 +24,21 @@ class ParserTest {
         assertEquals(Duration.ofMinutes(90), Duration.between(first.start, first.end))
     }
 
+    /** plan.ics is the export for an odd week (no `w`); plan_week790.ics the one for an even week.
+     *  Each lacks the classes of the other parity; together they make the whole plan. */
+    @Test fun icsExportsOfDifferentWeeksMerge() {
+        val odd = IcsParser.parse(fixture("plan.ics"))
+        val even = IcsParser.parse(fixture("plan_week790.ics"))
+        assertTrue(odd.none { it.summary.startsWith("Mn lab") })
+        assertTrue(even.none { it.summary.startsWith("Ak ") })
+
+        val merged = IcsParser.merge(listOf(odd, even))
+        assertEquals(100, merged.size)
+        assertEquals(4, merged.count { it.summary == "Mn lab JMr B316" })
+        assertEquals(8, merged.count { it.summary.startsWith("Ak ") })
+        assertEquals(merged.sortedBy { it.start }, merged)
+    }
+
     @Test fun summaryWithMultipleTeachersAndRooms() {
         val p = SummaryParser.parse("JaI lek BGó ASzw L334A L324A")
         assertEquals("JaI", p.subjectCode)
