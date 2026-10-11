@@ -27,8 +27,9 @@ struct ScheduleService {
         async let icsText = get(["type": source.type, "id": source.id, "cvsfile": "true"])
         async let mainHTML = get(pageQuery(type: source.type, id: source.id))
 
+        // In a week without classes the export is the "Brak zajęć" HTML page, not an empty calendar;
+        // the other weeks' exports below still have the semester's classes.
         let ics = try await icsText
-        guard ics.contains("BEGIN:VCALENDAR") else { throw ScheduleError.notACalendar }
 
         // The HTML page only adds names; a failure there must not lose the schedule.
         let mainPage = (try? await mainHTML).map(PlanHTMLParser.parse) ?? PlanPage()
@@ -42,6 +43,8 @@ struct ScheduleService {
             ICSParser.parse(try await get(["type": source.type, "id": source.id, "cvsfile": "true", "w": id]))
         }
         let rawEvents = ICSParser.merge([ICSParser.parse(ics)] + weekExports)
+        // A wrong plan id gets the same page, for every week.
+        guard ics.contains("BEGIN:VCALENDAR") || !rawEvents.isEmpty else { throw ScheduleError.notACalendar }
 
         // Weekly pages for weeks containing subjects/teachers we can't name yet.
         let weekIDs = Dictionary(mainPage.weeks.map { ($0.mondayKey, $0.id) }, uniquingKeysWith: { a, _ in a })

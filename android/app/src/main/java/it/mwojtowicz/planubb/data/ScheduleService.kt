@@ -49,10 +49,9 @@ class ScheduleService {
         val icsText = async { plan(mapOf("type" to source.type, "id" to source.id, "cvsfile" to "true")) }
         val mainHtml = async { runCatching { plan(pageQuery(source.type, source.id)) }.getOrNull() }
 
+        // In a week without classes the export is the "Brak zajęć" HTML page, not an empty calendar;
+        // the other weeks' exports below still have the semester's classes.
         val ics = icsText.await()
-        if ("BEGIN:VCALENDAR" !in ics) {
-            throw ScheduleException.NotACalendar()
-        }
 
         // The HTML page only adds names; a failure there must not lose the schedule.
         val mainPage = mainHtml.await()?.let(PlanHtmlParser::parse) ?: PlanPage()
@@ -68,6 +67,8 @@ class ScheduleService {
             }
         }.awaitAll().filterNotNull()
         val rawEvents = IcsParser.merge(listOf(IcsParser.parse(ics)) + weekExports)
+        // A wrong plan id gets the same page, for every week.
+        if ("BEGIN:VCALENDAR" !in ics && rawEvents.isEmpty()) throw ScheduleException.NotACalendar()
 
         // Weekly pages for weeks containing subjects/teachers we can't name yet.
         val weekIds = mainPage.weeks.associate { it.mondayKey to it.id }
