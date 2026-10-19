@@ -3,16 +3,18 @@
 #
 #   ./build-release.sh        # → build/release/plan-ubb-<version>.apk
 #
-# The first run creates the key: ~/.android/planubb-release.jks, with a random password kept in the
-# macOS Keychain (item "planubb-release-keystore"). Back up both. Every update must be signed with
-# the same key, or Android refuses to install it over the old version.
+# The first run creates the key outside the repository, with a random password kept in the macOS
+# Keychain. Back up both. Every update must be signed with the same key, or Android refuses to install
+# it over the old version. Where they are comes from signing.local.env at the repo root (gitignored,
+# see SIGNING.local.md); ANDROID_KEYSTORE, ANDROID_KEY_ALIAS and ANDROID_KEYCHAIN_ITEM override it.
 set -euo pipefail
 
 cd "${0:A:h}"
 
-KEYSTORE="${KEYSTORE:-$HOME/.android/planubb-release.jks}"
-KEY_ALIAS="planubb"
-KEYCHAIN_ITEM="planubb-release-keystore"
+[[ -f ../signing.local.env ]] && source ../signing.local.env
+KEYSTORE="${ANDROID_KEYSTORE:?Set it in signing.local.env (see SIGNING.local.md)}"
+KEY_ALIAS="${ANDROID_KEY_ALIAS:?Set it in signing.local.env (see SIGNING.local.md)}"
+KEYCHAIN_ITEM="${ANDROID_KEYCHAIN_ITEM:?Set it in signing.local.env (see SIGNING.local.md)}"
 
 if [[ -z "${JAVA_HOME:-}" ]] && ! /usr/libexec/java_home >/dev/null 2>&1; then
   export JAVA_HOME="$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home"
@@ -27,7 +29,7 @@ APKSIGNER="$(ls -d "$SDK_DIR"/build-tools/*/apksigner | sort -V | tail -1)"
 if [[ ! -f "$KEYSTORE" ]]; then
   if security find-generic-password -s "$KEYCHAIN_ITEM" >/dev/null 2>&1; then
     echo "The Keychain has a password for the release key, but $KEYSTORE is missing." >&2
-    echo "Restore the keystore from your backup (or set KEYSTORE=<path>); a new key couldn't update installed copies." >&2
+    echo "Restore the keystore from your backup (or set ANDROID_KEYSTORE=<path>); a new key couldn't update installed copies." >&2
     exit 1
   fi
   echo "==> Creating the release key at $KEYSTORE"

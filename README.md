@@ -58,9 +58,26 @@ android/build-release.sh    # → android/build/release/plan-ubb-<version>.apk
 ```
 
 It runs the unit tests, then builds the release APK signed with the Plan UBB release key, ready to attach to a GitHub release.
-The first run creates that key: `~/.android/planubb-release.jks`, with a random password in the macOS Keychain (item `planubb-release-keystore`).
-**Back up both.** Every update has to be signed with the same key, or Android won't install it over the previous version.
+The first run creates that key outside the repository, with a random password in the macOS Keychain. The script reads where they are from `signing.local.env`, and `SIGNING.local.md` explains it. Both files are gitignored and exist only on the maintainer's Mac.
+**Back up the key and its password.** Every update has to be signed with the same key, or Android won't install it over the previous version.
 Raise `versionCode` and `versionName` in `android/app/build.gradle.kts` before each release.
+
+### Releasing the iOS app
+
+```sh
+ios/upload-to-app-store.sh    # archive, sign with your paid team, upload to App Store Connect
+```
+
+The build shows up in TestFlight once Apple has processed it; submit it for review from App Store Connect.
+The App Store Connect API key is read from the macOS Keychain, never from a file in the repo. How it's stored is written in `SIGNING.local.md` (gitignored).
+Raise `CURRENT_PROJECT_VERSION` in `ios/project.yml` before each upload, and `MARKETING_VERSION` for a new version.
+
+Signing works differently from Android: there's no release key to keep.
+- **Distribution certificate**: Apple's cloud-managed one. Xcode asks Apple to sign the build during the upload (`-allowProvisioningUpdates` with the API key), so no Apple Distribution certificate or private key exists on the Mac, and there's nothing to back up.
+- **Provisioning profiles**: Xcode creates and renews the App Store profiles for `it.mwojtowicz.PlanUbb` and `it.mwojtowicz.PlanUbb.Widget` (with the App Group `group.it.mwojtowicz.PlanUbb`) in the paid team's account.
+- **What identifies the app**: the bundle ID and the team, not a key. A new Mac only needs Xcode and the API key in its Keychain.
+- **API key**: if it's revoked or lost, create a new one in App Store Connect (Users and Access → Integrations, role App Manager or Admin) and add it to the Keychain as described in `SIGNING.local.md`. Old builds and the published app aren't affected.
+- **Development certificate**: `install-on-device.sh` uses the Apple Development certificate in your Keychain, which Xcode creates when you sign in.
 
 Copies installed by `install-on-device.sh` are signed with the debug key, so a release APK can't be installed over them (and the other way round). Uninstall first, which deletes the app's data.
 

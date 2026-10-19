@@ -3,3 +3,7 @@ xcuserdata/
 DerivedData/
 build/
 .DS_Store
+
+# Local signing-key locations (notes and script config); never commit them.
+*.local.md
+*.local.env

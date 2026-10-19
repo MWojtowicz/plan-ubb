@@ -25,7 +25,15 @@ android/install-on-device.sh    # release build signed with ~/.android/debug.key
 
 ## Android release
 
-`android/build-release.sh` builds `android/build/release/plan-ubb-<version>.apk`, signed with the release key `~/.android/planubb-release.jks`. Its password is in the Keychain item `planubb-release-keystore`; never print it or put it in the repo. If the keystore is missing but the Keychain item exists, stop and ask the user to restore the backup. Don't create a new key: installed copies couldn't be updated. Release and debug-signed installs can't replace each other.
+`android/build-release.sh` builds `android/build/release/plan-ubb-<version>.apk`, signed with the release key. The key's and its password's locations are in `SIGNING.local.md` at the repo root, and the release scripts read them from `signing.local.env` (both gitignored; read them when you need them). The repo is public: never write key locations, Keychain item names, key IDs or passwords into committed files, and never print the password. If the keystore is missing but the Keychain item exists, stop and ask the user to restore the backup. Don't create a new key: installed copies couldn't be updated. Release and debug-signed installs can't replace each other.
+
+## iOS App Store release
+
+`ios/upload-to-app-store.sh` archives with the paid team and uploads to App Store Connect. The App Store Connect API key is in the login Keychain; `SIGNING.local.md` says how it's stored. Never write it into the repo or print it; for other API calls, decode it into a `mktemp -d` file and delete it afterwards. Creating an app record and publishing App Privacy answers can only be done on the website.
+
+- Signing uses Apple's cloud-managed distribution certificate: the account has no Apple Distribution certificate and the Mac holds no distribution key (only "Apple Development"). Don't create a distribution certificate or manual profiles; `-allowProvisioningUpdates` with the API key makes Xcode sign during export and manage the App Store profiles for the app and widget bundle IDs.
+- The paid team is detected from Xcode accounts (the non-free team) or given with `TEAM_ID`. Don't hard-code it.
+- The upload doesn't leave a local `.ipa` (`destination` is `upload`). To inspect the signature, export with `destination` `export` into a scratch directory instead.
 
 ## Live notification (Android) and Live Activity (iOS)
 
