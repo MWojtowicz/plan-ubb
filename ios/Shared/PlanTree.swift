@@ -67,11 +67,7 @@ struct PlanTreeService {
         if !query.isEmpty {
             comps.queryItems = query.sorted { $0.key < $1.key }.map { URLQueryItem(name: $0.key, value: $0.value) }
         }
-        let (data, response) = try await session.data(for: URLRequest(url: comps.url!, timeoutInterval: 20))
-        if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
-            throw ScheduleError.badResponse(http.statusCode)
-        }
-        return String(decoding: data, as: UTF8.self)
+        return try await session.planText(from: comps.url!)
     }
 }
 

@@ -8,8 +8,8 @@ struct ClassRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             VStack(alignment: .trailing, spacing: 2) {
-                Text(event.start, style: .time).font(.subheadline.weight(.semibold))
-                Text(event.end, style: .time).font(.caption).foregroundStyle(.secondary)
+                Text(event.start.planTime).font(.subheadline.weight(.semibold))
+                Text(event.end.planTime).font(.caption).foregroundStyle(.secondary)
             }
             .monospacedDigit()
             .frame(minWidth: 52, alignment: .trailing)
@@ -81,7 +81,7 @@ struct NowCard: View {
             ProgressView(timerInterval: event.start...event.end, countsDown: false) {
                 EmptyView()
             } currentValueLabel: {
-                Text("until \(event.end.formatted(date: .omitted, time: .shortened))")
+                Text("until \(event.end.planTime)")
             }
             .tint(event.tint)
             VStack(alignment: .leading, spacing: 4) {
@@ -111,7 +111,7 @@ struct ClassDetailView: View {
                 .padding(.vertical, 4)
             }
             Section("When") {
-                LabeledContent("Date", value: event.start.formatted(.dateTime.weekday(.wide).day().month(.wide).year()))
+                LabeledContent("Date", value: event.start.planFormatted(.dateTime.weekday(.wide).day().month(.wide).year()))
                 LabeledContent("Time", value: event.timeRange)
                 LabeledContent("Duration", value: Duration.seconds(event.duration).formatted(.units(allowed: [.hours, .minutes], width: .abbreviated)))
             }
@@ -140,7 +140,7 @@ struct ErrorBanner: View {
 extension Date {
     var daySectionTitle: String {
         let cal = Calendar.plan
-        let base = formatted(.dateTime.weekday(.wide).day().month(.wide))
+        let base = planFormatted(.dateTime.weekday(.wide).day().month(.wide))
         if cal.isDateInToday(self) { return String(localized: "Today · \(base)") }
         if cal.isDateInTomorrow(self) { return String(localized: "Tomorrow · \(base)") }
         return base

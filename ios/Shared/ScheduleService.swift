@@ -12,6 +12,41 @@ enum ScheduleError: LocalizedError {
     }
 }
 
+extension URLSession {
+    /// GETs `url` as text. The plan server is sometimes slow or briefly unavailable (more so from
+    /// abroad), so timeouts, dropped connections and 5xx/429 responses are retried after 1 s and 2 s.
+    func planText(from url: URL, attempts: Int = 3) async throws -> String {
+        var attempt = 1
+        while true {
+            do {
+                var request = URLRequest(url: url, timeoutInterval: 30)
+                request.cachePolicy = .reloadIgnoringLocalCacheData
+                let (data, response) = try await data(for: request)
+                if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
+                    throw ScheduleError.badResponse(http.statusCode)
+                }
+                return String(decoding: data, as: UTF8.self)
+            } catch {
+                guard attempt < attempts, Self.isTransient(error) else { throw error }
+                try await Task.sleep(for: .seconds(attempt))
+                attempt += 1
+            }
+        }
+    }
+
+    private static func isTransient(_ error: Error) -> Bool {
+        switch error {
+        case ScheduleError.badResponse(let code):
+            return code == 429 || code >= 500
+        case let error as URLError:
+            return [.timedOut, .networkConnectionLost, .cannotConnectToHost, .cannotFindHost,
+                    .dnsLookupFailed, .notConnectedToInternet, .secureConnectionFailed].contains(error.code)
+        default:
+            return false
+        }
+    }
+}
+
 /// Downloads a plan from plany.ubb.edu.pl.
 ///
 /// Events come from the ICS exports (whole semester, abbreviated names). Full subject
@@ -109,13 +144,7 @@ struct ScheduleService {
     private func get(_ query: [String: Any]) async throws -> String {
         var comps = URLComponents(string: Self.base)!
         comps.queryItems = query.sorted { $0.key < $1.key }.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
-        var request = URLRequest(url: comps.url!, timeoutInterval: 20)
-        request.cachePolicy = .reloadIgnoringLocalCacheData
-        let (data, response) = try await session.data(for: request)
-        if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
-            throw ScheduleError.badResponse(http.statusCode)
-        }
-        return String(decoding: data, as: UTF8.self)
+        return try await session.planText(from: comps.url!)
     }
 
     /// Runs `work` for every input concurrently, dropping failures.

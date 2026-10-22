@@ -126,7 +126,7 @@ private struct RectangularView: View {
                 Text(e.subjectName).font(.body.weight(.semibold)).lineLimit(1)
                 Text(e.teacherNames).lineLimit(1).foregroundStyle(.secondary)
             } else if let e = entry.next {
-                Text("Next · \(e.start.formatted(nextFormat(e)))")
+                Text("Next · \(e.start.planFormatted(nextFormat(e)))")
                     .font(.headline)
                     .widgetAccentable()
                     .lineLimit(1)
@@ -148,7 +148,7 @@ private struct InlineView: View {
         if let e = entry.current {
             Text("\(Image(systemName: "timer")) \(Text(timerInterval: e.start...e.end, countsDown: true)) \(e.subjectCode) \(e.location)")
         } else if let e = entry.next {
-            Text("\(e.start.formatted(nextFormat(e))) \(e.subjectCode) \(e.location)")
+            Text("\(e.start.planFormatted(nextFormat(e))) \(e.subjectCode) \(e.location)")
         } else {
             Text("No classes")
         }
@@ -170,7 +170,7 @@ private struct CircularView: View {
         } else if let e = entry.next {
             VStack(spacing: 0) {
                 Text(e.subjectCode).font(.caption2.weight(.semibold)).lineLimit(1).minimumScaleFactor(0.6)
-                Text(e.start, style: .time).font(.caption2).monospacedDigit().minimumScaleFactor(0.6)
+                Text(e.start.planTime).font(.caption2).monospacedDigit().minimumScaleFactor(0.6)
             }
         } else {
             Image(systemName: "calendar")
@@ -194,7 +194,7 @@ private struct SystemView: View {
                     .monospacedDigit()
                 details(e)
             } else if let e = entry.next {
-                Label("Next · \(e.start.formatted(nextFormat(e)))", systemImage: "arrow.forward.circle")
+                Label("Next · \(e.start.planFormatted(nextFormat(e)))", systemImage: "arrow.forward.circle")
                     .font(.caption.weight(.bold))
                     .foregroundStyle(e.tint)
                 Text(e.subjectName).font(.headline).lineLimit(2)
@@ -223,7 +223,7 @@ private struct SystemView: View {
 
 /// "14:30" today, "Sat 08:00" on other days.
 private func nextFormat(_ e: ClassEvent) -> Date.FormatStyle {
-    Calendar.current.isDateInToday(e.start)
+    Calendar.plan.isDateInToday(e.start)
         ? .dateTime.hour().minute()
         : .dateTime.weekday(.abbreviated).hour().minute()
 }

@@ -58,8 +58,13 @@ struct UpcomingView: View {
             } else if model.isLoading {
                 loading
             } else {
-                ContentUnavailableView("No schedule yet", systemImage: "calendar.badge.exclamationmark",
-                                       description: Text("Pull to refresh."))
+                ContentUnavailableView {
+                    Label("No schedule yet", systemImage: "calendar.badge.exclamationmark")
+                } description: {
+                    Text("Pull to refresh.")
+                } actions: {
+                    Button("Try again") { Task { await model.refresh() } }
+                }
             }
         }
         .refreshable { await model.refresh() }
@@ -95,6 +100,6 @@ private struct NextSummary: View {
 
     private var startDescription: String {
         let relative = event.start.formatted(.relative(presentation: .named))
-        return "\(relative) · \(event.start.formatted(.dateTime.weekday(.abbreviated).hour().minute())) · \(event.location)"
+        return "\(relative) · \(event.start.planFormatted(.dateTime.weekday(.abbreviated).hour().minute())) · \(event.location)"
     }
 }

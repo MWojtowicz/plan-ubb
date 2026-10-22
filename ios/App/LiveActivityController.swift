@@ -80,7 +80,7 @@ enum LiveActivityController {
     private static func scheduleNextDay(snapshot: ScheduleSnapshot, now: Date) async {
         let pending = Activity<ClassActivityAttributes>.activities.filter { $0.activityState == .pending }
         // The first class of the next day whose classes haven't started yet.
-        let cal = Calendar.current
+        let cal = Calendar.plan
         let firstOfEachDay = snapshot.events.enumerated()
             .filter { i, e in i == 0 || !cal.isDate(snapshot.events[i - 1].start, inSameDayAs: e.start) }
             .map(\.element)

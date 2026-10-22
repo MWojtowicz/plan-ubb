@@ -100,9 +100,11 @@ struct NameDirectory: Codable {
 }
 
 extension Calendar {
-    /// Gregorian calendar with weeks starting on Monday, as in the university plan.
+    /// Gregorian calendar with weeks starting on Monday, as in the university plan. Days are in
+    /// Polish time, where the classes are, whatever the device's time zone.
     static let plan: Calendar = {
         var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = .warsaw
         cal.firstWeekday = 2
         cal.minimumDaysInFirstWeek = 4
         return cal
@@ -111,4 +113,16 @@ extension Calendar {
     func startOfWeek(for date: Date) -> Date {
         dateInterval(of: .weekOfYear, for: date)?.start ?? startOfDay(for: date)
     }
+}
+
+extension Date {
+    /// Formatted in Polish time, where the classes are, whatever the device's time zone.
+    func planFormatted(_ style: Date.FormatStyle) -> String {
+        var style = style
+        style.timeZone = .warsaw
+        return formatted(style)
+    }
+
+    /// The time of day in Polish time: "13:15", or "1:15 PM" with a 12-hour clock.
+    var planTime: String { planFormatted(Date.FormatStyle(date: .omitted, time: .shortened)) }
 }

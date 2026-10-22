@@ -96,7 +96,7 @@ private struct LockScreenBanner: View {
                     .foregroundStyle(phase.focus?.tint ?? .white)
                 Spacer()
                 if let next = phase.upNext {
-                    Text("Next \(next.start, style: .time) · \(next.room)")
+                    Text("Next \(next.start.planTime) · \(next.room)")
                         .foregroundStyle(.white.opacity(0.75))
                 }
             }
@@ -216,7 +216,7 @@ private struct NextLine: View {
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: "arrow.forward.circle.fill").foregroundStyle(next.tint)
-            Text("Next \(next.start, style: .time)").fontWeight(.semibold).monospacedDigit()
+            Text("Next \(next.start.planTime)").fontWeight(.semibold).monospacedDigit()
             Text("\(next.name) · \(next.room)").lineLimit(1)
         }
     }
@@ -256,7 +256,7 @@ private extension ClassActivityAttributes.ContentState.Phase {
 
 private extension ActivityClass {
     var timeRange: String {
-        "\(start.formatted(date: .omitted, time: .shortened))–\(end.formatted(date: .omitted, time: .shortened))"
+        "\(start.planTime)–\(end.planTime)"
     }
 }
 

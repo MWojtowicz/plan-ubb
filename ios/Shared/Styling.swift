@@ -16,7 +16,7 @@ extension ClassEvent {
     }
 
     var timeRange: String {
-        "\(start.formatted(date: .omitted, time: .shortened)) – \(end.formatted(date: .omitted, time: .shortened))"
+        "\(start.planTime) – \(end.planTime)"
     }
 }
 

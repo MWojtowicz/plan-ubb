@@ -49,7 +49,7 @@ extension ClassActivityAttributes.ContentState {
     }
 
     /// The day's classes for `date`. Returns nil once they're all over.
-    init?(snapshot: ScheduleSnapshot, at date: Date, calendar: Calendar = .current) {
+    init?(snapshot: ScheduleSnapshot, at date: Date, calendar: Calendar = .plan) {
         let dayStart = calendar.startOfDay(for: date)
         let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart)!
         var classes = snapshot.events(from: dayStart, to: dayEnd).map(ActivityClass.init)

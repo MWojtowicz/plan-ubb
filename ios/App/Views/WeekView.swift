@@ -112,7 +112,7 @@ struct WeekView: View {
 
     private func weekTitle(_ monday: Date) -> String {
         let sunday = cal.date(byAdding: .day, value: 6, to: monday)!
-        return "\(monday.formatted(.dateTime.day().month(.abbreviated))) – \(sunday.formatted(.dateTime.day().month(.abbreviated).year()))"
+        return "\(monday.planFormatted(.dateTime.day().month(.abbreviated))) – \(sunday.planFormatted(.dateTime.day().month(.abbreviated).year()))"
     }
 
     private func step(_ delta: Int, in weeks: [Date]) {
