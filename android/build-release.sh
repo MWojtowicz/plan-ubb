@@ -1,7 +1,8 @@
 #!/bin/zsh
-# Builds the release APK for publishing (e.g. on GitHub Releases), signed with the Plan UBB release key.
+# Builds the release APK (for GitHub Releases) and app bundle (for Google Play), signed with the Plan UBB
+# release key.
 #
-#   ./build-release.sh        # → build/release/plan-ubb-<version>.apk
+#   ./build-release.sh        # → build/release/plan-ubb-<version>.apk and plan-ubb-<version>.aab
 #
 # The first run creates the key outside the repository, with a random password kept in the macOS
 # Keychain. Back up both. Every update must be signed with the same key, or Android refuses to install
@@ -47,9 +48,9 @@ password="$(security find-generic-password -s "$KEYCHAIN_ITEM" -w)"
 echo "==> Running the unit tests"
 ./gradlew --quiet :app:testDebugUnitTest
 
-echo "==> Building and signing the release APK"
+echo "==> Building and signing the release APK and app bundle"
 # Same mechanism Android Studio uses for "Generate Signed APK"; build.gradle.kts stays untouched.
-./gradlew --quiet :app:assembleRelease \
+./gradlew --quiet :app:assembleRelease :app:bundleRelease \
   -Pandroid.injected.signing.store.file="$KEYSTORE" \
   -Pandroid.injected.signing.store.password="$password" \
   -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
@@ -59,7 +60,10 @@ version="$(sed -n 's/.*versionName = "\(.*\)"/\1/p' app/build.gradle.kts)"
 mkdir -p build/release
 APK="build/release/plan-ubb-$version.apk"
 cp app/build/outputs/apk/release/app-release.apk "$APK"
+AAB="build/release/plan-ubb-$version.aab"
+cp app/build/outputs/bundle/release/app-release.aab "$AAB"
 
 echo "==> Checking the signature"
 "$APKSIGNER" verify --print-certs "$APK" 2>/dev/null | grep -E "certificate (DN|SHA-256)"
 echo "Release APK: ${APK:A} ($(du -h "$APK" | cut -f1 | tr -d ' '))"
+echo "App bundle:  ${AAB:A} ($(du -h "$AAB" | cut -f1 | tr -d ' '))"
