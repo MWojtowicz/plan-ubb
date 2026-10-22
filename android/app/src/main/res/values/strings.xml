@@ -85,11 +85,15 @@
     <string name="use_this_plan">Use this plan</string>
     <string name="open_on_site">Open on plany.ubb.edu.pl</string>
     <string name="plan_address_footer">Or paste the address of any plan from plany.ubb.edu.pl (group, teacher or room). Current: type %1$d, id %2$d.</string>
+    <string name="about">About</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="unofficial_app">Unofficial app, not affiliated with the University of Bielsko-Biala. Timetables come from the public website plany.ubb.edu.pl. No accounts, ads or tracking: your group and timetable are stored only on this phone.</string>
 
     <!-- Group picker -->
     <string name="choose_group">Choose group</string>
     <string name="choose_your_group">Choose your group</string>
     <string name="picker_intro">Go through your department, study mode, course and semester down to your group and lab subgroup. You can change it later in Settings.</string>
+    <string name="picker_unofficial">Unofficial app, not affiliated with the University of Bielsko-Biala. Timetables come from the public website plany.ubb.edu.pl, with no account needed.</string>
     <string name="search">Search</string>
     <string name="nothing_here">Nothing here.</string>
     <string name="use_whole_plan">Use the whole %1$s plan</string>

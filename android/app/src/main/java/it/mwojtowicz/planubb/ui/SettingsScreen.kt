@@ -50,6 +50,8 @@ import it.mwojtowicz.planubb.data.PlanSource
 import it.mwojtowicz.planubb.live.LiveClassNotification
 import it.mwojtowicz.planubb.live.PlanSync
 
+private const val PRIVACY_POLICY_URL = "https://mwojtowicz.github.io/plan-ubb/privacy.html"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(model: ScheduleViewModel, onChangeGroup: () -> Unit) {
@@ -156,9 +158,26 @@ fun SettingsScreen(model: ScheduleViewModel, onChangeGroup: () -> Unit) {
                         stringResource(R.string.plan_address_footer, source.type, source.id),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(bottom = 24.dp),
                     )
                 }
+            }
+
+            item { HorizontalDivider(Modifier.padding(top = 12.dp)) }
+            item { SectionHeader(stringResource(R.string.about)) }
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.privacy_policy)) },
+                    trailingContent = { Icon(Icons.AutoMirrored.Filled.OpenInNew, null, Modifier.size(18.dp)) },
+                    modifier = Modifier.clickable { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URL))) },
+                )
+            }
+            item {
+                Text(
+                    stringResource(R.string.unofficial_app),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
+                )
             }
         }
     }

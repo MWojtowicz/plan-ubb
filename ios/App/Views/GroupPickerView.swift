@@ -76,6 +76,9 @@ private struct GroupLevelView: View {
                         Text("Go through your department, study mode, course and semester down to your group and lab subgroup. You can change it later in Settings.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
+                        Text("Unofficial app, not affiliated with the University of Bielsko-Biala. Timetables come from the public website plany.ubb.edu.pl, with no account needed.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
                     }
                     .padding(.vertical, 4)
                 }

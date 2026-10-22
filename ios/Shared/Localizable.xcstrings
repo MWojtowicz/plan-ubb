@@ -89,6 +89,16 @@
         }
       }
     },
+    "About" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O aplikacji"
+          }
+        }
+      }
+    },
     "BREAK · NEXT CLASS IN" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -582,6 +592,16 @@
         }
       }
     },
+    "Privacy policy" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polityka prywatności"
+          }
+        }
+      }
+    },
     "Project" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -848,6 +868,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spróbuj ponownie"
+          }
+        }
+      }
+    },
+    "Unofficial app, not affiliated with the University of Bielsko-Biala. Timetables come from the public website plany.ubb.edu.pl, with no account needed." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacja nieoficjalna, niezwiązana z Uniwersytetem Bielsko-Bialskim. Plany pochodzą z publicznej strony plany.ubb.edu.pl, bez zakładania konta."
+          }
+        }
+      }
+    },
+    "Unofficial app, not affiliated with the University of Bielsko-Biala. Timetables come from the public website plany.ubb.edu.pl. No accounts, ads or tracking: your group and timetable are stored only on this phone." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacja nieoficjalna, niezwiązana z Uniwersytetem Bielsko-Bialskim. Plany pochodzą z publicznej strony plany.ubb.edu.pl. Bez kont, reklam i śledzenia: grupa i plan są zapisywane tylko na tym telefonie."
           }
         }
       }

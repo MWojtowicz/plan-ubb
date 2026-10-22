@@ -87,11 +87,15 @@
     <string name="use_this_plan">Użyj tego planu</string>
     <string name="open_on_site">Otwórz na plany.ubb.edu.pl</string>
     <string name="plan_address_footer">Możesz też wkleić adres dowolnego planu z plany.ubb.edu.pl (grupy, prowadzącego lub sali). Obecny: typ %1$d, id %2$d.</string>
+    <string name="about">O aplikacji</string>
+    <string name="privacy_policy">Polityka prywatności</string>
+    <string name="unofficial_app">Aplikacja nieoficjalna, niezwiązana z Uniwersytetem Bielsko-Bialskim. Plany pochodzą z publicznej strony plany.ubb.edu.pl. Bez kont, reklam i śledzenia: grupa i plan są zapisywane tylko na tym telefonie.</string>
 
     <!-- Group picker -->
     <string name="choose_group">Wybierz grupę</string>
     <string name="choose_your_group">Wybierz swoją grupę</string>
     <string name="picker_intro">Wybierz wydział, tryb studiów, kierunek i semestr, aż dojdziesz do swojej grupy i podgrupy laboratoryjnej. Możesz to później zmienić w Ustawieniach.</string>
+    <string name="picker_unofficial">Aplikacja nieoficjalna, niezwiązana z Uniwersytetem Bielsko-Bialskim. Plany pochodzą z publicznej strony plany.ubb.edu.pl, bez zakładania konta.</string>
     <string name="search">Szukaj</string>
     <string name="nothing_here">Nic tu nie ma.</string>
     <string name="use_whole_plan">Użyj całego planu %1$s</string>

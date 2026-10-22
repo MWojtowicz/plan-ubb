@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SettingsView: View {
+    private static let privacyPolicyURL = URL(string: "https://mwojtowicz.github.io/plan-ubb/privacy.html")!
+
     @Environment(ScheduleViewModel.self) private var model
     @State private var planInput = ""
     @State private var inputError: String?
@@ -78,6 +80,16 @@ struct SettingsView: View {
                     Text("Plan address")
                 } footer: {
                     Text("Or paste the address of any plan from plany.ubb.edu.pl (group, teacher or room). Current: type \(model.source.type), id \(model.source.id).")
+                }
+
+                Section {
+                    Link(destination: Self.privacyPolicyURL) {
+                        Label("Privacy policy", systemImage: "hand.raised")
+                    }
+                } header: {
+                    Text("About")
+                } footer: {
+                    Text("Unofficial app, not affiliated with the University of Bielsko-Biala. Timetables come from the public website plany.ubb.edu.pl. No accounts, ads or tracking: your group and timetable are stored only on this phone.")
                 }
             }
             .navigationTitle("Settings")
