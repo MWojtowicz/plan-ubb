@@ -3,11 +3,13 @@ import Foundation
 enum ScheduleError: LocalizedError {
     case badResponse(Int)
     case notACalendar
+    case unexpectedResponse
 
     var errorDescription: String? {
         switch self {
         case .badResponse(let code): return String(localized: "The plan server responded with HTTP \(code).")
         case .notACalendar: return String(localized: "The plan server did not return a calendar. Check the plan URL in Settings.")
+        case .unexpectedResponse: return String(localized: "The plan server sent an unexpected response. Try again later.")
         }
     }
 }
@@ -59,7 +61,7 @@ struct ScheduleService {
     func fetch(source: PlanSource, directory: NameDirectory) async throws -> (ScheduleSnapshot, NameDirectory) {
         var directory = directory
 
-        async let icsText = get(["type": source.type, "id": source.id, "cvsfile": "true"])
+        async let icsText = export(source)
         async let mainHTML = get(pageQuery(type: source.type, id: source.id))
 
         // In a week without classes the export is the plan's "Brak zajęć" HTML page instead of a
@@ -87,7 +89,7 @@ struct ScheduleService {
         // there are none. The export for each other week fills them in.
         let otherWeeks = weekList.weeks.map(\.id).filter { $0 != weekList.selectedWeekID }
         let weekExports = await fetchAll(otherWeeks) { id in
-            ICSParser.parse(try await get(["type": source.type, "id": source.id, "cvsfile": "true", "w": id]))
+            ICSParser.parse(try await export(source, week: id))
         }
         let rawEvents = ICSParser.merge([ICSParser.parse(ics)] + weekExports.compactMap { try? $0.get() })
 
@@ -156,6 +158,21 @@ struct ScheduleService {
         var q: [String: Any] = ["type": type, "id": id, "winW": 1319, "winH": 795, "loadBG": "000000"]
         if let week { q["w"] = week }
         return q
+    }
+
+    /// The ICS export, or for a week without classes the plan's "Brak zajęć" page. Anything else (an error
+    /// or maintenance page sent with HTTP 200) is retried after 1 s and 2 s, then reported as unexpected.
+    private func export(_ source: PlanSource, week: Int? = nil, attempts: Int = 3) async throws -> String {
+        var query: [String: Any] = ["type": source.type, "id": source.id, "cvsfile": "true"]
+        if let week { query["w"] = week }
+        var attempt = 1
+        while true {
+            let text = try await get(query)
+            if text.contains("BEGIN:VCALENDAR") || PlanHTMLParser.isPlanPage(text) { return text }
+            guard attempt < attempts else { throw ScheduleError.unexpectedResponse }
+            try await Task.sleep(for: .seconds(attempt))
+            attempt += 1
+        }
     }
 
     private func get(_ query: [String: Any]) async throws -> String {

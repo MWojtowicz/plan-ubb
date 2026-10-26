@@ -61,6 +61,16 @@
         }
       }
     },
+    "The plan server sent an unexpected response. Try again later." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serwer planu wysłał nieoczekiwaną odpowiedź. Spróbuj ponownie później."
+          }
+        }
+      }
+    },
     "The university hasn't published any classes in this plan yet." : {
       "localizations" : {
         "pl" : {

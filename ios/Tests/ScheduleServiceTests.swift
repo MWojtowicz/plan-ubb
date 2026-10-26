@@ -89,6 +89,29 @@ final class ScheduleServiceTests: XCTestCase {
         }
     }
 
+    /// An error or maintenance page sent with HTTP 200 is retried like a failed download.
+    func testUnexpectedPageIsRetried() async throws {
+        let odd = try fixture("plan.ics")
+        var exports = 0
+        RouteProtocol.handler = { q in
+            guard q["cvsfile"] != nil else { return (404, "") }
+            exports += 1
+            return (200, exports == 1 ? "<html><body>Przerwa techniczna</body></html>" : odd)
+        }
+        let (snapshot, _) = try await service.fetch(source: source, directory: NameDirectory())
+        XCTAssertEqual(snapshot.events.count, 96)
+    }
+
+    /// …and if it keeps coming, the error says so instead of blaming the plan URL.
+    func testUnexpectedPageIsReported() async throws {
+        RouteProtocol.handler = { _ in (200, "<html><body>Przerwa techniczna</body></html>") }
+        do {
+            _ = try await service.fetch(source: source, directory: NameDirectory())
+            XCTFail("Expected an error")
+        } catch ScheduleError.unexpectedResponse {
+        }
+    }
+
     func testUnknownPlanHasNoName() throws {
         XCTAssertNil(PlanHTMLParser.planName(in: try fixture("plan_unknown.html")))
         let page = PlanHTMLParser.parse(try fixture("plan_empty_week.html"))

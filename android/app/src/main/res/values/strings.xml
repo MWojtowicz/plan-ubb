@@ -124,6 +124,7 @@
     <!-- Errors -->
     <string name="error_http">The plan server responded with HTTP %1$d.</string>
     <string name="error_not_calendar">The plan server did not return a calendar. Check the plan in Settings.</string>
+    <string name="error_unexpected_response">The plan server sent an unexpected response. Try again later.</string>
     <string name="error_offline">Can\'t reach plany.ubb.edu.pl. Check your internet connection.</string>
     <string name="error_timeout">The plan server isn\'t responding. Try again later.</string>
     <string name="error_download">Couldn\'t download the plan.</string>

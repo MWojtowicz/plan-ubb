@@ -22,6 +22,7 @@ import javax.net.ssl.SSLException
 sealed class ScheduleException(message: String) : IOException(message) {
     class BadResponse(val code: Int) : ScheduleException("The plan server responded with HTTP $code.")
     class NotACalendar : ScheduleException("The plan server did not return a calendar.")
+    class UnexpectedResponse : ScheduleException("The plan server sent an unexpected response.")
 }
 
 private const val BASE = "https://plany.ubb.edu.pl/"
@@ -82,7 +83,7 @@ class ScheduleService(
     private val limit = Semaphore(4)
 
     suspend fun fetch(source: PlanSource, directory: NameDirectory): Pair<ScheduleSnapshot, NameDirectory> = coroutineScope {
-        val icsText = async { plan(mapOf("type" to source.type, "id" to source.id, "cvsfile" to "true")) }
+        val icsText = async { export(source) }
         val mainHtml = async { runCatching { plan(pageQuery(source.type, source.id)) } }
 
         // In a week without classes the export is the plan's "Brak zajęć" HTML page instead of a
@@ -103,7 +104,7 @@ class ScheduleService(
         // classes held in even weeks only ("NZ-P") are missing, and in a week without classes
         // there are none. The export for each other week fills them in.
         val weekExports = weekList.weeks.map { it.id }.filter { it != weekList.selectedWeekId }.map { id ->
-            async { runCatching { IcsParser.parse(plan(mapOf("type" to source.type, "id" to source.id, "cvsfile" to "true", "w" to id))) } }
+            async { runCatching { IcsParser.parse(export(source, week = id)) } }
         }.awaitAll()
         val rawEvents = IcsParser.merge(listOf(IcsParser.parse(ics)) + weekExports.mapNotNull { it.getOrNull() })
 
@@ -162,6 +163,25 @@ class ScheduleService(
     private fun pageQuery(type: Int, id: Int, week: Int? = null): Map<String, Any> = buildMap {
         put("type", type); put("id", id); put("winW", 1319); put("winH", 795); put("loadBG", "000000")
         if (week != null) put("w", week)
+    }
+
+    /**
+     * The ICS export, or for a week without classes the plan's "Brak zajęć" page. Anything else (an error or
+     * maintenance page sent with HTTP 200) is retried after 1 s and 2 s, then reported as unexpected.
+     */
+    private suspend fun export(source: PlanSource, week: Int? = null, attempts: Int = 3): String {
+        val query = buildMap<String, Any> {
+            put("type", source.type); put("id", source.id); put("cvsfile", "true")
+            if (week != null) put("w", week)
+        }
+        var attempt = 1
+        while (true) {
+            val text = plan(query)
+            if ("BEGIN:VCALENDAR" in text || PlanHtmlParser.isPlanPage(text)) return text
+            if (attempt >= attempts) throw ScheduleException.UnexpectedResponse()
+            delay(1_000L * attempt)
+            attempt++
+        }
     }
 
     private suspend fun plan(query: Map<String, Any>) = limit.withPermit { get("plan.php", query) }

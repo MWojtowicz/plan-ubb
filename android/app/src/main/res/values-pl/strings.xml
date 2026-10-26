@@ -126,6 +126,7 @@
     <!-- Errors -->
     <string name="error_http">Serwer planu odpowiedział kodem HTTP %1$d.</string>
     <string name="error_not_calendar">Serwer planu nie zwrócił kalendarza. Sprawdź plan w Ustawieniach.</string>
+    <string name="error_unexpected_response">Serwer planu wysłał nieoczekiwaną odpowiedź. Spróbuj ponownie później.</string>
     <string name="error_offline">Nie można połączyć się z plany.ubb.edu.pl. Sprawdź połączenie z internetem.</string>
     <string name="error_timeout">Serwer planu nie odpowiada. Spróbuj ponownie później.</string>
     <string name="error_download">Nie udało się pobrać planu.</string>

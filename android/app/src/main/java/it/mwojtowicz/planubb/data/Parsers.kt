@@ -173,6 +173,9 @@ object PlanHtmlParser {
         return page
     }
 
+    /** Whether [html] is one of the server's plan pages (a plan, or an empty week of one), rather than an error or maintenance page. */
+    fun isPlanPage(html: String): Boolean = "Plan zajęć - " in html
+
     /**
      * "Plan zajęć - prof. UBB dr hab. inż. Andrzej Nowak, tydzień 28.09-04.10, …" → the name part;
      * null for an unknown plan ("Plan zajęć - , tydzień …").

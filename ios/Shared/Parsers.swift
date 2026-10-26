@@ -172,6 +172,10 @@ enum PlanHTMLParser {
         return page
     }
 
+    /// Whether `html` is one of the server's plan pages (a plan, or an empty week of one), rather than an
+    /// error or maintenance page.
+    static func isPlanPage(_ html: String) -> Bool { html.contains("Plan zajęć - ") }
+
     /// "Plan zajęć - prof. UBB dr hab. inż. Andrzej Nowak, tydzień 28.09-04.10, …" → the name part;
     /// nil for an unknown plan ("Plan zajęć - , tydzień …").
     static func planName(in html: String) -> String? {

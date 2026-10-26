@@ -71,6 +71,25 @@ class ScheduleServiceTest {
         }
     }
 
+    /** An error or maintenance page sent with HTTP 200 is retried like a failed download. */
+    @Test fun unexpectedPageIsRetried() = runBlocking {
+        val odd = fixture("plan.ics")
+        var exports = 0
+        val (snapshot, _) = service { q ->
+            if ("cvsfile" !in q) null else if (++exports == 1) "<html><body>Przerwa techniczna</body></html>" else odd
+        }.fetch(source, NameDirectory())
+        assertEquals(96, snapshot.events.size)
+    }
+
+    /** …and if it keeps coming, the error says so instead of blaming the plan URL. */
+    @Test fun unexpectedPageIsReported() = runBlocking {
+        try {
+            service { "<html><body>Przerwa techniczna</body></html>" }.fetch(source, NameDirectory())
+            fail("Expected an error")
+        } catch (_: ScheduleException.UnexpectedResponse) {
+        }
+    }
+
     @Test fun unknownPlanHasNoName() {
         assertNull(PlanHtmlParser.planName(fixture("plan_unknown.html")))
         val page = PlanHtmlParser.parse(fixture("plan_empty_week.html"))

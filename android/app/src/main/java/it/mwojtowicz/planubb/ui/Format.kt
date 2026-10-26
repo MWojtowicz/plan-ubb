@@ -81,6 +81,7 @@ fun ClassEvent.kindName(context: Context): String =
 fun Throwable.userMessage(context: Context, fallback: Int = R.string.error_download): String = when (this) {
     is ScheduleException.BadResponse -> context.getString(R.string.error_http, code)
     is ScheduleException.NotACalendar -> context.getString(R.string.error_not_calendar)
+    is ScheduleException.UnexpectedResponse -> context.getString(R.string.error_unexpected_response)
     is UnknownHostException, is ConnectException -> context.getString(R.string.error_offline)
     is SocketTimeoutException -> context.getString(R.string.error_timeout)
     else -> context.getString(fallback)
