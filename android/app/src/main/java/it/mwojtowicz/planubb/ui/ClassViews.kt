@@ -53,10 +53,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import it.mwojtowicz.planubb.R
 import it.mwojtowicz.planubb.data.ClassEvent
+import it.mwojtowicz.planubb.data.Warsaw
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
-import java.time.ZoneId
 
 /** The current time, updated every [periodMillis]. */
 @Composable
@@ -198,7 +198,7 @@ fun ClassDetailScreen(event: ClassEvent, onBack: () -> Unit) {
                 }
             }
             item { SectionHeader(stringResource(R.string.detail_when)) }
-            item { ListItem(headlineContent = { Text(stringResource(R.string.detail_date)) }, trailingContent = { Text(event.start.atZone(ZoneId.systemDefault()).formatSkeleton("EEEEdMMMMyyyy")) }) }
+            item { ListItem(headlineContent = { Text(stringResource(R.string.detail_date)) }, trailingContent = { Text(event.start.atZone(Warsaw).formatSkeleton("EEEEdMMMMyyyy")) }) }
             item { ListItem(headlineContent = { Text(stringResource(R.string.detail_time)) }, trailingContent = { Text(event.timeRange(context)) }) }
             item { ListItem(headlineContent = { Text(stringResource(R.string.detail_duration)) }, trailingContent = { Text(event.duration.length(context)) }) }
             item { HorizontalDivider() }

@@ -130,7 +130,7 @@ fun PlanUbbApp(model: ScheduleViewModel) {
     ) { padding ->
         val openClass: (it.mwojtowicz.planubb.data.ClassEvent) -> Unit = { nav.navigate("class/${android.net.Uri.encode(it.id)}") }
         NavHost(nav, startDestination = Tab.Upcoming.route, modifier = Modifier.padding(padding).consumeWindowInsets(padding)) {
-            composable(Tab.Upcoming.route) { UpcomingScreen(model, openClass) }
+            composable(Tab.Upcoming.route) { UpcomingScreen(model, openClass, onChangeGroup = { nav.navigate("picker") }) }
             composable(Tab.Week.route) { WeekScreen(model, openClass) }
             composable(Tab.Settings.route) { SettingsScreen(model, onChangeGroup = { nav.navigate("picker") }) }
             composable("class/{id}") { backStack ->

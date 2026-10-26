@@ -85,6 +85,25 @@ struct ScheduleSnapshot: Codable {
     }
 }
 
+/// The two halves of the academic year. Odd semesters (1, 3, 5…) usually have their classes in the
+/// winter term (October–January), even ones in the summer term (February–June). Plans are published
+/// shortly before each term, so the other term's semesters have no classes yet.
+enum StudyTerm {
+    case winter, summer
+
+    /// The term in progress or, between terms, the next one.
+    static func current(at date: Date = .now) -> StudyTerm {
+        (2...6).contains(Calendar.plan.component(.month, from: date)) ? .summer : .winter
+    }
+
+    /// The usual term of the semester in a plan name such as "Inf/NZ/Ist/2sem/1gr/b", or nil if
+    /// the name has no semester (a teacher's or room's plan).
+    static func usual(forPlanNamed name: String) -> StudyTerm? {
+        guard let match = name.firstMatch(of: #/(?:^|/)(\d+)\s*sem(?:/|$)/#), let number = Int(match.1) else { return nil }
+        return number.isMultiple(of: 2) ? .summer : .winter
+    }
+}
+
 /// Cache of abbreviation → full name lookups, so refreshes only scrape what's new.
 struct NameDirectory: Codable {
     var subjects: [String: String] = [:]

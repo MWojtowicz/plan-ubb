@@ -41,7 +41,7 @@ data class ClassDay(
 
     companion object {
         /** The classes of the day containing [at], or null once they're all over. */
-        fun of(snapshot: ScheduleSnapshot, at: Instant, zone: ZoneId = ZoneId.systemDefault()): ClassDay? {
+        fun of(snapshot: ScheduleSnapshot, at: Instant, zone: ZoneId = Warsaw): ClassDay? {
             val day = at.localDate(zone)
             val classes = snapshot.events(day.startInstant(zone), day.plusDays(1).startInstant(zone))
             return if (classes.any { it.end.isAfter(at) }) ClassDay(classes) else null

@@ -4,12 +4,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.net.SocketException
+import java.net.SocketTimeoutException
 import java.net.URL
 import java.net.URLEncoder
+import java.net.UnknownHostException
 import java.time.Instant
+import javax.net.ssl.SSLException
 
 /** Download failures the app explains to the user (see `userMessage` in the UI). */
 sealed class ScheduleException(message: String) : IOException(message) {
@@ -19,14 +26,38 @@ sealed class ScheduleException(message: String) : IOException(message) {
 
 private const val BASE = "https://plany.ubb.edu.pl/"
 
-/** GET relative to plany.ubb.edu.pl, returning the body as UTF-8 text. */
-internal suspend fun httpGet(path: String, query: Map<String, Any> = emptyMap()): String = withContext(Dispatchers.IO) {
+/**
+ * GET relative to plany.ubb.edu.pl, returning the body as UTF-8 text. The plan server is sometimes slow or
+ * briefly unavailable (more so from abroad), so timeouts, dropped connections and 5xx/429 responses are
+ * retried after 1 s and 2 s.
+ */
+internal suspend fun httpGet(path: String, query: Map<String, Any> = emptyMap(), attempts: Int = 3): String {
+    var attempt = 1
+    while (true) {
+        try {
+            return httpGetOnce(path, query)
+        } catch (e: IOException) {
+            if (attempt >= attempts || !e.isTransient) throw e
+            delay(1_000L * attempt)
+            attempt++
+        }
+    }
+}
+
+private val IOException.isTransient: Boolean
+    get() = when (this) {
+        is ScheduleException.BadResponse -> code == 429 || code >= 500
+        is SocketTimeoutException, is SocketException, is UnknownHostException, is SSLException -> true
+        else -> false
+    }
+
+private suspend fun httpGetOnce(path: String, query: Map<String, Any>): String = withContext(Dispatchers.IO) {
     val qs = query.entries.sortedBy { it.key }
         .joinToString("&") { "${it.key}=${URLEncoder.encode(it.value.toString(), "UTF-8")}" }
     val url = URL(BASE + path + if (qs.isEmpty()) "" else "?$qs")
     val conn = url.openConnection() as HttpURLConnection
-    conn.connectTimeout = 20_000
-    conn.readTimeout = 20_000
+    conn.connectTimeout = 30_000
+    conn.readTimeout = 30_000
     conn.useCaches = false
     try {
         val code = conn.responseCode
@@ -44,34 +75,47 @@ internal suspend fun httpGet(path: String, query: Map<String, Any> = emptyMap())
  * from the legend on the weekly HTML pages, full teacher names from each teacher's own plan page.
  * Name lookups are cached in [NameDirectory].
  */
-class ScheduleService {
+class ScheduleService(
+    private val get: suspend (path: String, query: Map<String, Any>) -> String = { path, query -> httpGet(path, query) },
+) {
+    /** At most this many downloads at a time, so a slow server isn't flooded. */
+    private val limit = Semaphore(4)
+
     suspend fun fetch(source: PlanSource, directory: NameDirectory): Pair<ScheduleSnapshot, NameDirectory> = coroutineScope {
         val icsText = async { plan(mapOf("type" to source.type, "id" to source.id, "cvsfile" to "true")) }
-        val mainHtml = async { runCatching { plan(pageQuery(source.type, source.id)) }.getOrNull() }
+        val mainHtml = async { runCatching { plan(pageQuery(source.type, source.id)) } }
 
-        // In a week without classes the export is the "Brak zajęć" HTML page, not an empty calendar;
-        // the other weeks' exports below still have the semester's classes.
+        // In a week without classes the export is the plan's "Brak zajęć" HTML page instead of a
+        // calendar. That page still names the plan and lists the semester's weeks; for a wrong plan id
+        // the name is empty.
         val ics = icsText.await()
+        val emptyWeekPage = if ("BEGIN:VCALENDAR" in ics) null else PlanHtmlParser.parse(ics)
+        if (emptyWeekPage != null && emptyWeekPage.planName == null) throw ScheduleException.NotACalendar()
 
-        // The HTML page only adds names; a failure there must not lose the schedule.
-        val mainPage = mainHtml.await()?.let(PlanHtmlParser::parse) ?: PlanPage()
+        // The HTML page adds names, and the week list when the export had none to give; a failure
+        // there must not lose the classes.
+        val mainResult = mainHtml.await()
+        val mainPage = mainResult.getOrNull()?.let(PlanHtmlParser::parse) ?: PlanPage()
         directory.merge(mainPage)
+        val weekList = if (mainPage.weeks.isEmpty()) emptyWeekPage ?: mainPage else mainPage
 
         // The export only has the classes held in the current week's pattern: in an odd week,
-        // classes held in even weeks only ("NZ-P") are missing. The export for each other week
-        // fills them in.
-        val weekExports = mainPage.weeks.map { it.id }.filter { it != mainPage.selectedWeekId }.map { id ->
-            async {
-                runCatching { IcsParser.parse(plan(mapOf("type" to source.type, "id" to source.id, "cvsfile" to "true", "w" to id))) }
-                    .getOrNull()
-            }
-        }.awaitAll().filterNotNull()
-        val rawEvents = IcsParser.merge(listOf(IcsParser.parse(ics)) + weekExports)
-        // A wrong plan id gets the same page, for every week.
-        if ("BEGIN:VCALENDAR" !in ics && rawEvents.isEmpty()) throw ScheduleException.NotACalendar()
+        // classes held in even weeks only ("NZ-P") are missing, and in a week without classes
+        // there are none. The export for each other week fills them in.
+        val weekExports = weekList.weeks.map { it.id }.filter { it != weekList.selectedWeekId }.map { id ->
+            async { runCatching { IcsParser.parse(plan(mapOf("type" to source.type, "id" to source.id, "cvsfile" to "true", "w" to id))) } }
+        }.awaitAll()
+        val rawEvents = IcsParser.merge(listOf(IcsParser.parse(ics)) + weekExports.mapNotNull { it.getOrNull() })
+
+        // No classes at all is a real answer (an even semester in autumn has none yet), but only
+        // when every week was checked. Otherwise report what went wrong.
+        if (rawEvents.isEmpty()) {
+            weekExports.firstNotNullOfOrNull { it.exceptionOrNull() }?.let { throw it }
+            if (weekList.weeks.isEmpty()) mainResult.exceptionOrNull()?.let { throw it }
+        }
 
         // Weekly pages for weeks containing subjects/teachers we can't name yet.
-        val weekIds = mainPage.weeks.associate { it.mondayKey to it.id }
+        val weekIds = weekList.weeks.associate { it.mondayKey to it.id }
         val weeksToFetch = mutableSetOf<Int>()
         for (raw in rawEvents) {
             val parsed = SummaryParser.parse(raw.summary, directory.rooms, directory.teacherIds.keys)
@@ -111,7 +155,7 @@ class ScheduleService {
                 rooms = p.rooms,
             )
         }
-        ScheduleSnapshot(source, mainPage.planName, Instant.now(), events) to directory
+        ScheduleSnapshot(source, mainPage.planName ?: emptyWeekPage?.planName, Instant.now(), events) to directory
     }
 
     // Without winW/winH the server returns a JS stub that measures the window.
@@ -120,7 +164,7 @@ class ScheduleService {
         if (week != null) put("w", week)
     }
 
-    private suspend fun plan(query: Map<String, Any>) = httpGet("plan.php", query)
+    private suspend fun plan(query: Map<String, Any>) = limit.withPermit { get("plan.php", query) }
 }
 
 /** Fetches levels of the group tree, one request per level, as the site's left frame does. */

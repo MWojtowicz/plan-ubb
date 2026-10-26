@@ -2,6 +2,7 @@ import SwiftUI
 
 struct UpcomingView: View {
     @Environment(ScheduleViewModel.self) private var model
+    @State private var showsGroupPicker = false
 
     var body: some View {
         @Bindable var model = model
@@ -20,6 +21,12 @@ struct UpcomingView: View {
                         Label("Live Activity", systemImage: "dot.radiowaves.left.and.right")
                     }
                     .toggleStyle(.button)
+                }
+            }
+            .sheet(isPresented: $showsGroupPicker) {
+                GroupPickerView(current: model.source) { source in
+                    showsGroupPicker = false
+                    Task { await model.changeSource(to: source) }
                 }
             }
         }
@@ -52,8 +59,7 @@ struct UpcomingView: View {
                     }
                 }
                 if upcoming.isEmpty && snapshot.current(at: now) == nil {
-                    ContentUnavailableView("No upcoming classes", systemImage: "checkmark.circle",
-                                           description: Text("There are no more classes in this plan."))
+                    NoClassesView(snapshot: snapshot, now: now) { showsGroupPicker = true }
                 }
             } else if model.isLoading {
                 loading
@@ -78,6 +84,47 @@ struct UpcomingView: View {
         }
         .padding(.vertical, 40)
         .listRowBackground(Color.clear)
+    }
+}
+
+/// The plan has no classes left. Usually that's a semester outside its term: even semesters have no
+/// classes in autumn, odd ones none in spring, and a finished semester means the student moved on.
+private struct NoClassesView: View {
+    let snapshot: ScheduleSnapshot
+    let now: Date
+    let chooseGroup: () -> Void
+
+    var body: some View {
+        let term = snapshot.planName.flatMap(StudyTerm.usual(forPlanNamed:))
+        ContentUnavailableView {
+            if snapshot.events.isEmpty {
+                Label("No classes in this plan", systemImage: "calendar.badge.clock")
+            } else {
+                Label("No upcoming classes", systemImage: "checkmark.circle")
+            }
+        } description: {
+            Text(description(term: term))
+        } actions: {
+            if term != nil {
+                Button("Choose another group", action: chooseGroup)
+            }
+        }
+    }
+
+    private func description(term: StudyTerm?) -> String {
+        guard snapshot.events.isEmpty else {
+            return term == nil
+                ? String(localized: "There are no more classes in this plan.")
+                : String(localized: "There are no more classes in this plan. When your next semester starts, choose its group.")
+        }
+        switch term {
+        case .summer? where StudyTerm.current(at: now) == .winter:
+            return String(localized: "Even semesters usually have classes in spring and summer, and their plan isn't published yet. If you're in a different semester now, choose its group.")
+        case .winter? where StudyTerm.current(at: now) == .summer:
+            return String(localized: "Odd semesters usually have classes in autumn and winter, and their plan isn't published yet. If you're in a different semester now, choose its group.")
+        default:
+            return String(localized: "The university hasn't published any classes in this plan yet.")
+        }
     }
 }
 

@@ -57,6 +57,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import it.mwojtowicz.planubb.data.ClassEvent
+import it.mwojtowicz.planubb.data.Warsaw
 import it.mwojtowicz.planubb.data.localDate
 import it.mwojtowicz.planubb.data.mondayOf
 import it.mwojtowicz.planubb.data.startInstant
@@ -71,7 +72,7 @@ fun WeekScreen(model: ScheduleViewModel, onOpen: (ClassEvent) -> Unit) {
     val isLoading by model.isLoading.collectAsStateWithLifecycle()
     val error by model.error.collectAsStateWithLifecycle()
     val events = snapshot?.events.orEmpty()
-    val thisWeek = mondayOf(LocalDate.now())
+    val thisWeek = mondayOf(LocalDate.now(Warsaw))
     val context = LocalContext.current
 
     // Every week from the first to the last class (always including this week),

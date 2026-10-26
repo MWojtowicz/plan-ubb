@@ -1,6 +1,86 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Choose another group" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz inną grupę"
+          }
+        }
+      }
+    },
+    "Classes usually in autumn and winter" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zajęcia zwykle jesienią i zimą"
+          }
+        }
+      }
+    },
+    "Classes usually in spring and summer" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zajęcia zwykle wiosną i latem"
+          }
+        }
+      }
+    },
+    "Even semesters usually have classes in spring and summer, and their plan isn't published yet. If you're in a different semester now, choose its group." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semestry parzyste mają zwykle zajęcia wiosną i latem, a ich plan nie jest jeszcze opublikowany. Jeśli jesteś teraz na innym semestrze, wybierz jego grupę."
+          }
+        }
+      }
+    },
+    "No classes in this plan" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak zajęć w tym planie"
+          }
+        }
+      }
+    },
+    "Odd semesters usually have classes in autumn and winter, and their plan isn't published yet. If you're in a different semester now, choose its group." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semestry nieparzyste mają zwykle zajęcia jesienią i zimą, a ich plan nie jest jeszcze opublikowany. Jeśli jesteś teraz na innym semestrze, wybierz jego grupę."
+          }
+        }
+      }
+    },
+    "The university hasn't published any classes in this plan yet." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uczelnia nie opublikowała jeszcze żadnych zajęć w tym planie."
+          }
+        }
+      }
+    },
+    "There are no more classes in this plan. When your next semester starts, choose its group." : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W tym planie nie ma już więcej zajęć. Gdy zacznie się Twój kolejny semestr, wybierz jego grupę."
+          }
+        }
+      }
+    },
     "· %@" : {
       "shouldTranslate" : false
     },
@@ -451,7 +531,6 @@
       }
     },
     "No upcoming classes" : {
-      "extractionState" : "stale",
       "localizations" : {
         "pl" : {
           "stringUnit" : {

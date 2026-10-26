@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import it.mwojtowicz.planubb.data.PlanSource
 import it.mwojtowicz.planubb.data.PlanTreeNode
 import it.mwojtowicz.planubb.data.PlanTreeService
+import it.mwojtowicz.planubb.data.StudyTerm
 import kotlinx.coroutines.CancellationException
 
 /** A level the user has opened, with its siblings so its title can be shortened like in the list. */
@@ -198,9 +199,22 @@ private fun LevelList(
                     val short = node.shortName(all, labels)
                     val plan = node.plan
                     val isLeafPlan = node.isLeaf && plan != null
+                    val term = StudyTerm.usualFor(node.name)
+                        ?.takeIf { node.name.endsWith("sem") && it != StudyTerm.current() }
                     ListItem(
                         headlineContent = { Text(short) },
-                        supportingContent = if (short != node.name) ({ Text(node.name) }) else null,
+                        supportingContent = if (short != node.name || term != null) ({
+                            Column {
+                                if (short != node.name) Text(node.name)
+                                // Semesters of the other term have no classes yet; say so before someone picks one.
+                                if (term != null) {
+                                    Text(
+                                        stringResource(if (term == StudyTerm.SUMMER) R.string.term_hint_summer else R.string.term_hint_winter),
+                                        color = MaterialTheme.colorScheme.tertiary,
+                                    )
+                                }
+                            }
+                        }) else null,
                         trailingContent = {
                             when {
                                 isLeafPlan && plan == current -> Icon(Icons.Default.Check, stringResource(R.string.current), tint = MaterialTheme.colorScheme.primary)

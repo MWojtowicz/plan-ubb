@@ -121,6 +121,33 @@ val Warsaw: ZoneId = ZoneId.of("Europe/Warsaw")
 /** Monday of the week containing [date], as in the university plan. */
 fun mondayOf(date: LocalDate): LocalDate = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
 
-fun Instant.localDate(zone: ZoneId = ZoneId.systemDefault()): LocalDate = atZone(zone).toLocalDate()
+/** The day in Polish time, where the classes are, whatever the device's time zone. */
+fun Instant.localDate(zone: ZoneId = Warsaw): LocalDate = atZone(zone).toLocalDate()
 
-fun LocalDate.startInstant(zone: ZoneId = ZoneId.systemDefault()): Instant = atStartOfDay(zone).toInstant()
+fun LocalDate.startInstant(zone: ZoneId = Warsaw): Instant = atStartOfDay(zone).toInstant()
+
+/**
+ * The two halves of the academic year. Odd semesters (1, 3, 5…) usually have their classes in the winter
+ * term (October–January), even ones in the summer term (February–June). Plans are published shortly before
+ * each term, so the other term's semesters have no classes yet.
+ */
+enum class StudyTerm {
+    WINTER, SUMMER;
+
+    companion object {
+        private val semester = Regex("(?:^|/)(\\d+)\\s*sem(?:/|$)")
+
+        /** The term in progress or, between terms, the next one. */
+        fun current(at: Instant = Instant.now()): StudyTerm =
+            if (at.localDate(Warsaw).monthValue in 2..6) SUMMER else WINTER
+
+        /**
+         * The usual term of the semester in a plan name such as "Inf/NZ/Ist/2sem/1gr/b", or null if the
+         * name has no semester (a teacher's or room's plan).
+         */
+        fun usualFor(planName: String): StudyTerm? {
+            val number = semester.find(planName)?.groupValues?.get(1)?.toIntOrNull() ?: return null
+            return if (number % 2 == 0) SUMMER else WINTER
+        }
+    }
+}

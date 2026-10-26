@@ -172,9 +172,12 @@ enum PlanHTMLParser {
         return page
     }
 
-    /// "Plan zajęć - prof. UBB dr hab. inż. Andrzej Nowak, tydzień 28.09-04.10, …" → the name part.
+    /// "Plan zajęć - prof. UBB dr hab. inż. Andrzej Nowak, tydzień 28.09-04.10, …" → the name part;
+    /// nil for an unknown plan ("Plan zajęć - , tydzień …").
     static func planName(in html: String) -> String? {
-        matches("Plan zajęć - (.+?), (?:liczba stanowisk|tydzień)", in: html).first.map { decode($0[1]).trimmed }
+        matches("Plan zajęć - ([^<]*?), (?:liczba stanowisk|tydzień)", in: html).first
+            .map { decode($0[1]).trimmed }
+            .flatMap { $0.isEmpty ? nil : $0 }
     }
 
     static func mondayKey(for date: Date) -> String {

@@ -21,6 +21,12 @@
     <string name="next_class">Następne: %1$s</string>
     <string name="no_upcoming_title">Brak nadchodzących zajęć</string>
     <string name="no_upcoming_message">W tym planie nie ma już więcej zajęć.</string>
+    <string name="no_more_classes_next_semester">W tym planie nie ma już więcej zajęć. Gdy zacznie się Twój kolejny semestr, wybierz jego grupę.</string>
+    <string name="no_classes_title">Brak zajęć w tym planie</string>
+    <string name="no_classes_summer_term">Semestry parzyste mają zwykle zajęcia wiosną i latem, a ich plan nie jest jeszcze opublikowany. Jeśli jesteś teraz na innym semestrze, wybierz jego grupę.</string>
+    <string name="no_classes_winter_term">Semestry nieparzyste mają zwykle zajęcia jesienią i zimą, a ich plan nie jest jeszcze opublikowany. Jeśli jesteś teraz na innym semestrze, wybierz jego grupę.</string>
+    <string name="no_classes_unpublished">Uczelnia nie opublikowała jeszcze żadnych zajęć w tym planie.</string>
+    <string name="choose_another_group">Wybierz inną grupę</string>
     <string name="no_schedule_title">Brak planu</string>
     <string name="no_schedule_message">Przeciągnij w dół, aby odświeżyć.</string>
 
@@ -102,6 +108,8 @@
     <string name="use_whole_plan_footer">Pokazuje zajęcia wszystkich grup poniżej.</string>
     <string name="current">Obecny</string>
     <string name="tree_semester">Semestr %1$s</string>
+    <string name="term_hint_summer">Zajęcia zwykle wiosną i latem</string>
+    <string name="term_hint_winter">Zajęcia zwykle jesienią i zimą</string>
     <string name="tree_group">Grupa %1$s</string>
     <string name="tree_subgroup">Podgrupa %1$s</string>
 

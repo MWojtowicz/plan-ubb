@@ -1,0 +1,29 @@
+<div style="position: absolute; top: 5px; left: 5px; width: auto;
+                      height: 23px;">
+            <div class=title style=" width: 82.5px;" >
+              Grupy \  
+            </div>
+          </div>
+    <div style="position: absolute; top: 36px; left: 5px; width: auto; height: auto;">
+    <div class="title">
+    Plan zajęć - , tydzień 26.10-01.11, rok 2026/2027
+    </div>
+    </div>
+    <div style="position: absolute; top: 67px; left: 5px; width: auto; height: auto;">
+    <div class="title">
+    Brak zajęć dla wybranej grupy tygodni lub brak praw ich wyświetlania.
+    </div>
+    </div><div class="wBBox" id="weekBrowser"
+  style="position: absolute; top: 98px; left: 5px;
+  height: 118px;">
+  <div class="titleBar">Określ tydzień
+  <img src="images/help.gif" style="position: absolute; top: 2px; right: 2px;"
+  onMouseOver="overlib('<b></b><br /><b></b><br /><b></b>')"
+  onMouseOut="nd()">
+  </div><div class="wBParent" style="height: 72px;">
+  <div class="wBLeft">Wybierz grupę tygodni:</div>
+  <div class="wBRight">
+  <select id="wBWeekDef" name="wBWeekDef" class="wBSelect" onChange="weekFilter(this)">
+  <option value="0" selected>
+           - - - - - - - - - - - - - - - - - - - - - -
+          </option> <option value="1" bw="1">Stacjonarne</option> <option value="10" bw="1">Niestacjonarne Wieczorowe</option> <option value="133" bw="1">NZ WBMiI_WZiT</option> <option value="146" bw="1">NZ WIMBiŚ</option> <option value="152" bw="1">NZ WIMBiŚ 1sem</option> <option value="169" bw="1">NZ WHS 10zj</option> <option value="208" bw="1">NZ WHS 9 zj</option> <option value="211" bw="1">NZ WHS 10zj 1sem</option> <option value="214" bw="1">NZ WHS 9 zj 1sem</option> <option value="217" bw="0">NZ WNoZ 10zj</option>   </select> </div> <div class="wBLeft">lub jeden tydzień:</div> <div class="wBRight" >   <select id="wBWeek" name="wBWeek" onChange="weekSelected(this)" style="width: 170px;">        <option value="0"       > - - - - - - - - - - -    </option> <option value="787">21.09-27.09</option> <option value="788">28.09-04.10</option> <option value="789">05.10-11.10</option> <option value="790">12.10-18.10</option> <option value="791">19.10-25.10</option> <option value="792" selected>26.10-01.11</option> <option value="793">02.11-08.11</option> <option value="794">09.11-15.11</option> <option value="795">16.11-22.11</option> <option value="796">23.11-29.11</option> <option value="797">30.11-06.12</option> <option value="798">07.12-13.12</option> <option value="799">14.12-20.12</option> <option value="800">21.12-27.12</option> <option value="802">04.01-10.01</option> <option value="803">11.01-17.01</option> <option value="804">18.01-24.01</option> <option value="805">25.01-31.01</option> <option value="806">01.02-07.02</option>   </select> </div> <div class="wBCheck">        <input id="checkBoxFiltered" type="checkbox"  >Pokaż wyłącznie zajęcia zdefiniowane dla wybranego tygodnia lub grupy tygodni </div> <input id="wBButton" type="button" value="Wyświetl"  nType=""  SID="999999999"  onClick="showWBSelected(1)">   </div></div>

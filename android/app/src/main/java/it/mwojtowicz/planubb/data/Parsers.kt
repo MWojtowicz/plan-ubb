@@ -173,9 +173,13 @@ object PlanHtmlParser {
         return page
     }
 
-    /** "Plan zajęć - prof. UBB dr hab. inż. Andrzej Nowak, tydzień 28.09-04.10, …" → the name part. */
+    /**
+     * "Plan zajęć - prof. UBB dr hab. inż. Andrzej Nowak, tydzień 28.09-04.10, …" → the name part;
+     * null for an unknown plan ("Plan zajęć - , tydzień …").
+     */
     fun planName(html: String): String? =
-        matches("Plan zajęć - (.+?), (?:liczba stanowisk|tydzień)", html).firstOrNull()?.let { decode(it[1]).trim() }
+        matches("Plan zajęć - ([^<]*?), (?:liczba stanowisk|tydzień)", html).firstOrNull()
+            ?.let { decode(it[1]).trim() }?.ifEmpty { null }
 
     fun mondayKey(instant: Instant): String = mondayOf(instant.localDate(Warsaw)).toString()
 

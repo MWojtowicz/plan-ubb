@@ -12,12 +12,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.EventBusy
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -36,11 +38,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import it.mwojtowicz.planubb.R
 import it.mwojtowicz.planubb.data.ClassEvent
+import it.mwojtowicz.planubb.data.ScheduleSnapshot
+import it.mwojtowicz.planubb.data.StudyTerm
 import java.time.Duration
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpcomingScreen(model: ScheduleViewModel, onOpen: (ClassEvent) -> Unit) {
+fun UpcomingScreen(model: ScheduleViewModel, onOpen: (ClassEvent) -> Unit, onChangeGroup: () -> Unit) {
     val snapshot by model.snapshot.collectAsStateWithLifecycle()
     val isLoading by model.isLoading.collectAsStateWithLifecycle()
     val error by model.error.collectAsStateWithLifecycle()
@@ -77,7 +81,7 @@ fun UpcomingScreen(model: ScheduleViewModel, onOpen: (ClassEvent) -> Unit) {
                             events.forEach { e -> item(key = e.id) { ClassRow(e, now, onClick = { onOpen(e) }) } }
                         }
                         if (upcoming.isEmpty() && current == null) {
-                            item { Empty(Icons.Default.CheckCircle, stringResource(R.string.no_upcoming_title), stringResource(R.string.no_upcoming_message)) }
+                            item { NoClasses(s, now, onChangeGroup) }
                         }
                     }
                 }
@@ -94,6 +98,30 @@ fun UpcomingScreen(model: ScheduleViewModel, onOpen: (ClassEvent) -> Unit) {
             }
         }
     }
+}
+
+/**
+ * The plan has no classes left. Usually that's a semester outside its term: even semesters have no classes
+ * in autumn, odd ones none in spring, and a finished semester means the student moved on.
+ */
+@Composable
+private fun NoClasses(snapshot: ScheduleSnapshot, now: java.time.Instant, onChangeGroup: () -> Unit) {
+    val term = snapshot.planName?.let(StudyTerm::usualFor)
+    val title = if (snapshot.events.isEmpty()) R.string.no_classes_title else R.string.no_upcoming_title
+    val message = when {
+        snapshot.events.isNotEmpty() -> if (term == null) R.string.no_upcoming_message else R.string.no_more_classes_next_semester
+        term == StudyTerm.SUMMER && StudyTerm.current(now) == StudyTerm.WINTER -> R.string.no_classes_summer_term
+        term == StudyTerm.WINTER && StudyTerm.current(now) == StudyTerm.SUMMER -> R.string.no_classes_winter_term
+        else -> R.string.no_classes_unpublished
+    }
+    Empty(
+        if (snapshot.events.isEmpty()) Icons.Default.DateRange else Icons.Default.CheckCircle,
+        stringResource(title),
+        stringResource(message),
+        action = if (term == null) null else ({
+            OutlinedButton(onClick = onChangeGroup) { Text(stringResource(R.string.choose_another_group)) }
+        }),
+    )
 }
 
 /** One-line summary: when the next class starts. */

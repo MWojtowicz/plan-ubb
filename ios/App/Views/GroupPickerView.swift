@@ -133,6 +133,13 @@ private struct GroupLevelView: View {
             if short != node.name {
                 Text(node.name).font(.caption).foregroundStyle(.secondary)
             }
+            // Semesters of the other term have no classes yet; say so before someone picks one.
+            if node.name.hasSuffix("sem"), let term = StudyTerm.usual(forPlanNamed: node.name), term != StudyTerm.current() {
+                Text(term == .summer ? String(localized: "Classes usually in spring and summer")
+                                     : String(localized: "Classes usually in autumn and winter"))
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            }
         }
         if node.isLeaf, let plan = node.plan {
             pickButton(plan) {

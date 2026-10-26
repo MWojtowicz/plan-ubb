@@ -62,27 +62,44 @@ struct ScheduleService {
         async let icsText = get(["type": source.type, "id": source.id, "cvsfile": "true"])
         async let mainHTML = get(pageQuery(type: source.type, id: source.id))
 
-        // In a week without classes the export is the "Brak zajęć" HTML page, not an empty calendar;
-        // the other weeks' exports below still have the semester's classes.
+        // In a week without classes the export is the plan's "Brak zajęć" HTML page instead of a
+        // calendar. That page still names the plan and lists the semester's weeks; for a wrong plan id
+        // the name is empty.
         let ics = try await icsText
+        let emptyWeekPage = ics.contains("BEGIN:VCALENDAR") ? nil : PlanHTMLParser.parse(ics)
+        if let emptyWeekPage, emptyWeekPage.planName == nil { throw ScheduleError.notACalendar }
 
-        // The HTML page only adds names; a failure there must not lose the schedule.
-        let mainPage = (try? await mainHTML).map(PlanHTMLParser.parse) ?? PlanPage()
+        // The HTML page adds names, and the week list when the export had none to give; a failure
+        // there must not lose the classes.
+        let mainPage: PlanPage
+        var mainPageError: Error?
+        do {
+            mainPage = PlanHTMLParser.parse(try await mainHTML)
+        } catch {
+            mainPage = PlanPage()
+            mainPageError = error
+        }
         directory.merge(mainPage)
+        let weekList = mainPage.weeks.isEmpty ? emptyWeekPage ?? mainPage : mainPage
 
         // The export only has the classes held in the current week's pattern: in an odd week,
-        // classes held in even weeks only ("NZ-P") are missing. The export for each other week
-        // fills them in.
-        let otherWeeks = mainPage.weeks.map(\.id).filter { $0 != mainPage.selectedWeekID }
+        // classes held in even weeks only ("NZ-P") are missing, and in a week without classes
+        // there are none. The export for each other week fills them in.
+        let otherWeeks = weekList.weeks.map(\.id).filter { $0 != weekList.selectedWeekID }
         let weekExports = await fetchAll(otherWeeks) { id in
             ICSParser.parse(try await get(["type": source.type, "id": source.id, "cvsfile": "true", "w": id]))
         }
-        let rawEvents = ICSParser.merge([ICSParser.parse(ics)] + weekExports)
-        // A wrong plan id gets the same page, for every week.
-        guard ics.contains("BEGIN:VCALENDAR") || !rawEvents.isEmpty else { throw ScheduleError.notACalendar }
+        let rawEvents = ICSParser.merge([ICSParser.parse(ics)] + weekExports.compactMap { try? $0.get() })
+
+        // No classes at all is a real answer (an even semester in autumn has none yet), but only
+        // when every week was checked. Otherwise report what went wrong.
+        if rawEvents.isEmpty {
+            for case .failure(let error) in weekExports { throw error }
+            if weekList.weeks.isEmpty, let mainPageError { throw mainPageError }
+        }
 
         // Weekly pages for weeks containing subjects/teachers we can't name yet.
-        let weekIDs = Dictionary(mainPage.weeks.map { ($0.mondayKey, $0.id) }, uniquingKeysWith: { a, _ in a })
+        let weekIDs = Dictionary(weekList.weeks.map { ($0.mondayKey, $0.id) }, uniquingKeysWith: { a, _ in a })
         var weeksToFetch = Set<Int>()
         for raw in rawEvents {
             let parsed = SummaryParser.parse(raw.summary, knownRooms: directory.rooms, knownTeachers: Set(directory.teacherIDs.keys))
@@ -92,7 +109,7 @@ struct ScheduleService {
                 weeksToFetch.insert(id)
             }
         }
-        for page in await fetchAll(Array(weeksToFetch), { id in
+        for case .success(let page) in await fetchAll(Array(weeksToFetch), { id in
             PlanHTMLParser.parse(try await get(pageQuery(type: source.type, id: source.id, week: id)))
         }) {
             directory.merge(page)
@@ -106,10 +123,10 @@ struct ScheduleService {
         let unnamed = teacherCodes.filter { directory.teachers[$0] == nil }.compactMap { code in
             directory.teacherIDs[code].map { (code, $0) }
         }
-        for (code, name) in await fetchAll(unnamed, { code, id -> (String, String)? in
+        for case .success(let (code, name)?) in await fetchAll(unnamed, { code, id -> (String, String)? in
             guard let name = PlanHTMLParser.planName(in: try await get(pageQuery(type: 10, id: id))) else { return nil }
             return (code, name)
-        }).compactMap({ $0 }) {
+        }) {
             directory.teachers[code] = name
         }
 
@@ -128,7 +145,7 @@ struct ScheduleService {
             )
         }
 
-        let snapshot = ScheduleSnapshot(source: source, planName: mainPage.planName, fetchedAt: Date(), events: events)
+        let snapshot = ScheduleSnapshot(source: source, planName: mainPage.planName ?? emptyWeekPage?.planName, fetchedAt: Date(), events: events)
         return (snapshot, directory)
     }
 
@@ -147,18 +164,25 @@ struct ScheduleService {
         return try await session.planText(from: comps.url!)
     }
 
-    /// Runs `work` for every input concurrently, dropping failures.
+    /// Runs `work` for every input, at most `limit` at a time so a slow server isn't flooded.
     private func fetchAll<Input: Sendable, Output: Sendable>(
         _ inputs: [Input],
+        limit: Int = 4,
         _ work: @escaping @Sendable (Input) async throws -> Output
-    ) async -> [Output] {
-        await withTaskGroup(of: Output?.self) { group in
-            for input in inputs {
-                group.addTask { try? await work(input) }
+    ) async -> [Result<Output, Error>] {
+        await withTaskGroup(of: Result<Output, Error>.self) { group in
+            var pending = inputs.makeIterator()
+            func startNext() {
+                guard let input = pending.next() else { return }
+                group.addTask {
+                    do { return .success(try await work(input)) } catch { return .failure(error) }
+                }
             }
-            var results: [Output] = []
+            for _ in 0..<limit { startNext() }
+            var results: [Result<Output, Error>] = []
             for await result in group {
-                if let result { results.append(result) }
+                results.append(result)
+                startNext()
             }
             return results
         }

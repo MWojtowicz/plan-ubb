@@ -6,13 +6,13 @@ import it.mwojtowicz.planubb.R
 import it.mwojtowicz.planubb.data.ClassEvent
 import it.mwojtowicz.planubb.data.ScheduleException
 import it.mwojtowicz.planubb.data.localDate
+import it.mwojtowicz.planubb.data.Warsaw
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.time.temporal.TemporalAccessor
@@ -26,16 +26,17 @@ fun TemporalAccessor.formatSkeleton(skeleton: String): String {
     return DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, skeleton), locale).format(this)
 }
 
+/** The time of day in Polish time, where the classes are, whatever the device's time zone. */
 fun Instant.time(): String =
-    atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(Locale.getDefault()))
+    atZone(Warsaw).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(Locale.getDefault()))
 
 /** "14:30" today, "Sat 08:00" on other days. */
-fun Instant.timeOrDayTime(today: LocalDate = LocalDate.now()): String =
-    if (localDate() == today) time() else atZone(ZoneId.systemDefault()).formatSkeleton("EEEjmm")
+fun Instant.timeOrDayTime(today: LocalDate = LocalDate.now(Warsaw)): String =
+    if (localDate() == today) time() else atZone(Warsaw).formatSkeleton("EEEjmm")
 
 fun ClassEvent.timeRange(context: Context): String = context.getString(R.string.time_range, start.time(), end.time())
 
-fun LocalDate.daySectionTitle(context: Context, today: LocalDate = LocalDate.now()): String {
+fun LocalDate.daySectionTitle(context: Context, today: LocalDate = LocalDate.now(Warsaw)): String {
     val base = formatSkeleton("EEEEdMMMM")
     return when (this) {
         today -> context.getString(R.string.today_day, base)

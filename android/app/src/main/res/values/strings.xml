@@ -22,6 +22,12 @@
     <string name="next_class">Next: %1$s</string>
     <string name="no_upcoming_title">No upcoming classes</string>
     <string name="no_upcoming_message">There are no more classes in this plan.</string>
+    <string name="no_more_classes_next_semester">There are no more classes in this plan. When your next semester starts, choose its group.</string>
+    <string name="no_classes_title">No classes in this plan</string>
+    <string name="no_classes_summer_term">Even semesters usually have classes in spring and summer, and their plan isn\'t published yet. If you\'re in a different semester now, choose its group.</string>
+    <string name="no_classes_winter_term">Odd semesters usually have classes in autumn and winter, and their plan isn\'t published yet. If you\'re in a different semester now, choose its group.</string>
+    <string name="no_classes_unpublished">The university hasn\'t published any classes in this plan yet.</string>
+    <string name="choose_another_group">Choose another group</string>
     <string name="no_schedule_title">No schedule yet</string>
     <string name="no_schedule_message">Pull to refresh.</string>
 
@@ -100,6 +106,8 @@
     <string name="use_whole_plan_footer">Shows the classes of every group below.</string>
     <string name="current">Current</string>
     <string name="tree_semester">Semester %1$s</string>
+    <string name="term_hint_summer">Classes usually in spring and summer</string>
+    <string name="term_hint_winter">Classes usually in autumn and winter</string>
     <string name="tree_group">Group %1$s</string>
     <string name="tree_subgroup">Subgroup %1$s</string>
 
