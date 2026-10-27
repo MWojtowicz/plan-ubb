@@ -1,6 +1,6 @@
 ---
 name: plan-ubb-dev
-description: Workflows for the Plan UBB repo (iOS app in ios/, Android app in android/). Use when installing the app on the connected iPhone or Android phone, running the tests, adding or changing user-facing text (English + Polish translations), or retaking the framed README screenshots.
+description: Workflows for the Plan UBB repo (iOS app in ios/, Android app in android/). Use when installing the app on the connected iPhone or Android phone, running the tests, adding or changing user-facing text (English + Polish translations), releasing to Google Play or the App Store (builds, review, store images), or retaking the framed README screenshots.
 ---
 
 # Plan UBB development
@@ -25,7 +25,24 @@ android/install-on-device.sh    # release build signed with ~/.android/debug.key
 
 ## Android release
 
-`android/build-release.sh` builds `android/build/release/plan-ubb-<version>.apk`, signed with the release key. The key's and its password's locations are in `SIGNING.local.md` at the repo root, and the release scripts read them from `signing.local.env` (both gitignored; read them when you need them). The repo is public: never write key locations, Keychain item names, key IDs or passwords into committed files, and never print the password. If the keystore is missing but the Keychain item exists, stop and ask the user to restore the backup. Don't create a new key: installed copies couldn't be updated. Release and debug-signed installs can't replace each other.
+`android/build-release.sh` builds `android/build/release/plan-ubb-<version>.apk` and `.aab`, signed with the release key. The key's and its password's locations are in `SIGNING.local.md` at the repo root, and the release scripts read them from `signing.local.env` (both gitignored; read them when you need them). The repo is public: never write key locations, Keychain item names, key IDs or passwords into committed files, and never print the password. If the keystore is missing but the Keychain item exists, stop and ask the user to restore the backup. Don't create a new key: installed copies couldn't be updated. Release and debug-signed installs can't replace each other.
+
+Keep the two apps' versions in step where possible: Android `versionCode`/`versionName` in `android/app/build.gradle.kts`, iOS `CURRENT_PROJECT_VERSION`/`MARKETING_VERSION` in `ios/project.yml`. Every upload needs a new build number. Don't rebuild a version that was already uploaded: `build-release.sh` overwrites `build/release/plan-ubb-<version>.*`, so bump first.
+
+To smoke-test a release build on the emulator without touching `build/release/`: `./gradlew :app:assembleRelease` without the signing properties gives `app-release-unsigned.apk`; sign a copy in the scratchpad with `apksigner sign --ks ~/.android/debug.keystore --ks-pass pass:android` (needs `JAVA_HOME`), uninstall the release-signed app (`adb uninstall`, sometimes `--user 0`), install, launch, and check `logcat` for `FATAL`.
+
+### Google Play
+
+There's no Play API setup; releases go through Play Console in Chrome (the user is signed in; never sign in yourself).
+1. Production track → "Utwórz nową wersję" (Create new release). Upload the `.aab` with `file_upload` on the hidden file input (find "input type=file for app bundles"); don't click the upload button, it opens a native picker. Wait until Play finishes "optimizing for distribution".
+2. The release name fills in as `<versionCode> (<versionName>)`. Release notes go in one textarea with language tags: `<pl-PL>…</pl-PL>` and `<en-US>…</en-US>`.
+3. "Dalej" (Next) → check warnings → "Zapisz" (Save). Then the publishing overview ("Przegląd publikowanych zmian") → "Prześlij zmiany do sprawdzenia" → confirm "Wyślij zmiany do sprawdzenia". Sending for review needs the user's go-ahead in chat. Sometimes Play moves a saved draft into review on its own, so check the overview after saving.
+4. Managed publishing is off: the release goes live as soon as Google approves it.
+
+Expected warnings and suggestions that need no action:
+- "App Bundle contains native code but debug symbols weren't uploaded": the `.so` files come from AndroidX libraries, not from us.
+- "Bitmap downsampling / BitmapFactory without inSampleSize": the only `BitmapFactory` call in the dex is in AndroidX `IconCompat` (URI icons), which the app never uses; our notification icons come from `createWithBitmap`.
+- "R8 optimization": R8 runs with `proguard-android-optimize.txt` plus resource shrinking. `app/proguard-rules.pro` adds no keep rules; the remaining kept code is from AndroidX consumer rules. To find which class calls something, dump the dex (`build-tools/*/dexdump -d`) and look up the obfuscated class in `app/build/outputs/mapping/release/mapping.txt` (use `LC_ALL=C` with grep/awk, the dump isn't valid UTF-8). `configuration.txt` in the same folder is the merged R8 config.
 
 ## iOS App Store release
 
@@ -34,6 +51,23 @@ android/install-on-device.sh    # release build signed with ~/.android/debug.key
 - Signing uses Apple's cloud-managed distribution certificate: the account has no Apple Distribution certificate and the Mac holds no distribution key (only "Apple Development"). Don't create a distribution certificate or manual profiles; `-allowProvisioningUpdates` with the API key makes Xcode sign during export and manage the App Store profiles for the app and widget bundle IDs.
 - The paid team is detected from Xcode accounts (the non-free team) or given with `TEAM_ID`. Don't hard-code it.
 - The upload doesn't leave a local `.ipa` (`destination` is `upload`). To inspect the signature, export with `destination` `export` into a scratch directory instead.
+
+### App Store Connect API
+
+Everything after the upload can go through the API, which avoids the website (the user signs in there themselves; never sign in for them). In a scratchpad venv with `pyjwt`, `cryptography` and `requests`, read the key from the Keychain into memory (as `SIGNING.local.md` describes) and sign an ES256 JWT (`aud` `appstoreconnect-v1`, at most 20 minutes). Never write the key to the repo or print it.
+- New version: create an `appStoreVersions` record (or PATCH `versionString` on the editable one), attach the build (`relationships/build`), set `usesNonExemptEncryption` false on the build, and fill `appStoreVersionLocalizations` (description, keywords, promotional text, what's new).
+- Review notes: `appStoreReviewDetails` (`notes`, max 4000 characters). Give the reviewer an exact path to a group that has classes on the review date, not "the first entry".
+- Submit: `reviewSubmissions` (platform IOS) → `reviewSubmissionItems` with the version → PATCH the submission `submitted: true`. To withdraw, PATCH `canceled: true`. Replying to App Review messages is web-only.
+- Screenshots: `appScreenshotSets` per localization (`APP_IPHONE_67` holds the 1320×2868 shots). Each asset's `imageAsset.templateUrl` downloads the full-size image (`{w}`, `{h}`, `{f}` = png).
+
+### Product page header and search results images (iOS 27+)
+
+App Store Connect's "Header and Search Results" tab, next to "App Previews and Screenshots".
+- Sizes: header 21:9 at 3840×1646, search results 3:2 from 1920×1280 up to 3840×2560 (JPEG/PNG), or one universal 16:9 PNG at 5244×2950 for both. There must be no alpha channel. Videos are 5–30 s at 30/60 fps, muted and looping.
+- Apple's rules: one clear idea, a short localized phrase, the app's real UI; no prices, URLs, copyright symbols, other platforms' logos, awards or unverifiable claims; content suitable for 4+. The safe area is only in Apple's templates, so keep text and the main subject inside the middle ~70% of the width, and check with the Preview button.
+- `docs/screenshots/store_assets.py <shots> <out>` draws both from the App Store screenshots (`<locale>-0/1/2.png` = Upcoming, Week, Details) with `frame.py`'s phone frames. The phrases are in its `TEXT`. Look at every image before uploading.
+- Upload through the asset library: POST `appAssetLibraryImages` (`category` `CREATIVE_ASSETS`, `fileName`, `fileSize`, relationship `assetLibrary` → `appAssetLibraries` with the app's id) → PUT the bytes to each `uploadOperations` URL with only its `requestHeaders` (no bearer token) → PATCH `uploaded: true` (no checksum) → poll until `state` leaves `AWAITING_UPLOAD`/`UPLOAD_COMPLETE`. Then POST `appAssetLibraryPlacements` with `placementType` `PRODUCT_PAGE_HEADER_ASSET` or `APP_STORE_SEARCH_RESULTS_ASSET` and relationships `appStoreVersionLocalization` and `image`. Placements can't be edited: delete the old one of the same type first (`GET appStoreVersionLocalizations/{id}/placements`). `GET /v1/appAssetLibraryRefData` lists the valid types.
+- Placements can only be created while the version is editable. With the version waiting for review the API answers 409 `STATE_ERROR.INVALID_STATE`, so add them before submitting, or to the next version.
 
 ## Live notification (Android) and Live Activity (iOS)
 

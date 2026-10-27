@@ -54,10 +54,10 @@ DEVICE_ID=<serial> android/install-on-device.sh
 ### Releasing the Android app
 
 ```sh
-android/build-release.sh    # → android/build/release/plan-ubb-<version>.apk
+android/build-release.sh    # → android/build/release/plan-ubb-<version>.apk and .aab
 ```
 
-It runs the unit tests, then builds the release APK signed with the Plan UBB release key, ready to attach to a GitHub release.
+It runs the unit tests, then builds the release APK (for a GitHub release) and the app bundle (for Google Play), both signed with the Plan UBB release key. Release builds are shrunk with R8 and resource shrinking.
 The first run creates that key outside the repository, with a random password in the macOS Keychain. The script reads where they are from `signing.local.env`, and `SIGNING.local.md` explains it. Both files are gitignored and exist only on the maintainer's Mac.
 **Back up the key and its password.** Every update has to be signed with the same key, or Android won't install it over the previous version.
 Raise `versionCode` and `versionName` in `android/app/build.gradle.kts` before each release.
@@ -122,12 +122,19 @@ The UI tests launch the app in English (`-AppleLanguages (en)`), because they lo
 | What | Source |
 |---|---|
 | Group tree | `left_menu.php` (departments), then `left_menu_feed.php?type=1&branch=<id>&link=0&bOne=1` per level |
-| Events (whole semester) | `plan.php?type=0&id=…&cvsfile=true` (ICS export) |
+| Events | `plan.php?type=0&id=…&cvsfile=true` (ICS export of the current week's pattern), plus `&w=<weekId>` for every other week of the semester |
 | Full subject names | the legend on the weekly HTML pages (`&w=<weekId>`) |
 | Full teacher names | each teacher's plan page (`type=10&id=…`) |
 
 The HTML pages need the `winW`/`winH` query parameters. Without them the server sends back a JavaScript stub instead of the plan.
 Name lookups are cached (`NameDirectory`), so later refreshes only download the ICS and the current week.
+
+What the server does that the apps have to handle:
+- **The export holds only one week's pattern.** In an odd week, classes held only in even weeks are missing, so both apps also download the export for each week in the week list (four at a time) and merge them.
+- **Weeks without classes.** There the export is the HTML page "Brak zajęć dla wybranej grupy tygodni…" instead of a calendar. That page still names the plan ("Plan zajęć - <name>, tydzień …") and lists the semester's weeks, so the other weeks still load. For a wrong plan id it's the same page with an empty name, which is how the apps tell "no such plan" from "no classes this week".
+- **Semesters out of season.** Plans are published shortly before each term: odd semesters (1, 3, 5…) have classes October–January, even ones February–June. In autumn an even semester's plan exists but is empty in every week. That's a valid empty plan, not an error: Upcoming explains it, and the group picker marks those semesters (`StudyTerm`).
+- **Unexpected pages.** If a response is neither a calendar nor a plan page (an error or maintenance page sent with HTTP 200), it's retried after 1 s and 2 s, then reported as "unexpected response", not as a wrong plan URL. Timeouts, connection errors, 5xx and 429 are retried the same way, with a 30 s timeout.
+- When nothing loads, the first real failure is shown. An empty plan only counts as empty when every week was checked.
 
 The app and the widget share a cache through the App Group `group.it.mwojtowicz.PlanUbb`.
 If that cache is older than 6 hours, the widget refreshes it itself.
